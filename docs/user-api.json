@@ -1,0 +1,370 @@
+{
+  "openapi": "3.0.2",
+  "info": {
+    "title": "User API",
+    "description": "User API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000"
+    }
+  ],
+  "paths": {
+    "/api/users": {
+      "post" : {
+        "description": "Register new user",
+        "requestBody" : {
+          "content": {
+            "application/json": {
+              "examples": {
+                "amin" : {
+                  "description" : "Register user amin",
+                  "value" : {
+                    "name" : "Fakhrul Amin", 
+                    "email" : "amin@example.com",
+                    "contact" : "0856732893928", 
+                    "password" : "password"
+                  }
+                }
+              },
+              "schema" : {
+                "type": "object",
+                "required": [
+                  "name",
+                  "email",
+                  "contact",
+                  "password"
+                ],
+                "properties": {
+                  "name" : {
+                    "type": "string"
+                  },
+                  "email" : {
+                    "type": "string"
+                  },
+                  "contact" : {
+                    "type": "string"
+                  },
+                  "password" : {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "400" : {
+            "description": "Validation error",
+            "content": {
+              "application/json" : {
+                "examples" : {
+                  "validationerror" : {
+                    "description" : "Validation error",
+                    "value" : {
+                      "errors" : {
+                        "name" : [
+                          "name must not be blank",
+                          "name min 4 characters" 
+                        ],
+                        "email" : [
+                          "email must not be blank",
+                          "email must contain @"
+                        ],
+                        "contact" : [
+                          "contact must not be blank",
+                          "contact must be a number"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "201" : {
+            "description": "Success register user",
+            "content": {
+              "application/json" : {
+                "examples": {
+                  "success" : {
+                    "description": "Success register user",
+                    "value" : {
+                      "data" : {
+                        "id" : 1,
+                        "name" : "Fakhrul Amin",
+                        "email" : "amin@example.com",
+                        "contact" : "0856732893928"
+                      }
+                    }
+                  }
+                },
+                "schema" : {
+                  "type": "object",
+                  "properties": {
+                    "data" : {
+                      "type": "object",
+                      "properties": {
+                        "id" : {
+                          "type": "integer"
+                        },
+                        "name" : {
+                          "type": "string"
+                        },
+                        "email" : {
+                          "type": "string"
+                        },
+                        "contact" : {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "errors" : {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/login" : {
+      "post" : {
+        "description": "Login user",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "amin" : {
+                  "description" : "Login user amin",
+                  "value" : {
+                    "email" : "amin@example.com", 
+                    "contact" : "0856732893928", 
+                    "password" : "password"
+                  }
+                }
+              },
+              "schema" : {
+                "type": "object",
+                "required": [
+                  "email",
+                  "contact",
+                  "password"
+                ],
+                "properties": {
+                  "email" : {
+                    "type": "string"
+                  },
+                  "contact" : {
+                    "type": "string"
+                  },
+                  "password" : {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200" : {
+            "description": "Login user amin",
+            "content": {
+              "application/json" : {
+                "examples": {
+                  "success" : {
+                    "description": "Success login user",
+                    "value" : {
+                      "data" : {
+                        "id" : 1,
+                        "name" : "Fakhrul Amin",
+                        "email" : "amin@example.com",
+                        "contact" : "0856732893928",
+                        "token" : "12h1ni2xuhhor7ywqhdkshfk"
+                      },
+                      "errors" : {}
+                    }
+                  }
+                },
+                "schema" : {
+                  "type": "object",
+                  "properties": {
+                    "data" : {
+                      "type": "object",
+                      "properties": {
+                        "id" : {
+                          "type": "integer"
+                        },
+                        "name" : {
+                          "type": "string"
+                        },
+                        "email" : {
+                          "type": "string"
+                        },
+                        "contact" : {
+                          "type": "string"
+                        },
+                        "token" : {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "errors" : {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+
+      }
+    },
+    "/api/users/current" : {
+      "get" : {
+        "description": "Get current user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header"
+          }
+        ],
+        "responses": {
+          "200" : {
+            "description": "Success get current user",
+            "content": {
+              "application/json" : {
+                "schema" : {
+                  "type": "object",
+                  "properties": {
+                    "data" : {
+                      "type": "object",
+                      "properties": {
+                        "id" : {
+                          "type": "integer"
+                        },
+                        "name" : {
+                          "type": "string"
+                        },
+                        "email" : {
+                          "type": "string"
+                        },
+                        "contact" : {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "errors" : {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "patch" : {
+        "description": "Update current user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header"
+          }
+        ],
+        "requestBody" : {
+          "description": "Update current user",
+          "content": {
+            "application/json" : {
+              "schema" : {
+                "type": "object",
+                "properties": {
+                  "email" : {
+                    "type": "string"
+                  },
+                  "contact" : {
+                    "type": "string"
+                  },
+                  "password" : {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200" : {
+            "description": "Success update user",
+            "content": {
+              "application/json" : {
+                "schema" : {
+                  "type": "object",
+                  "properties": {
+                    "data" : {
+                      "type": "object",
+                      "properties": {
+                        "id" : {
+                          "type": "integer"
+                        },
+                        "name" : {
+                          "type": "string"
+                        },
+                        "email" : {
+                          "type": "string"
+                        },
+                        "contact" : {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "errors" : {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }, 
+    "api/users/logout" : {
+      "delete" : {
+        "description" : "Logout current user",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header"
+          }
+        ],
+        "responses" : {
+          "200" : {
+            "description" : "Success logout current user",
+            "content" : {
+              "application/json" : {
+                "schema" : {
+                  "type" : "object",
+                  "properties" : {
+                    "data" : {
+                      "type": "boolean"
+                    },
+                    "errors" : {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+
+
+  }
+}
