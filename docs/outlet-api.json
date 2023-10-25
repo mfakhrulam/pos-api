@@ -17,7 +17,11 @@
           "parameters": [
             {
               "name": "Authorization",
-              "in": "header"
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             }
           ],
           "requestBody" : {
@@ -96,20 +100,20 @@
           }
         },
         "get": {
-          "description": "Search outlet",
+          "description": "Get list outlet",
           "parameters": [
             {
               "name": "Authorization",
-              "in": "header"
-            },
-            {
-              "name": "name",
-              "in": "query"
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             }
           ],
           "responses": {
             "200": {
-              "description": "Success search outlet",
+              "description": "Success get list outlet",
               "content": {
                 "application/json": {
                   "schema": {

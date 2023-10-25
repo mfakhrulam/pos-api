@@ -17,11 +17,19 @@
           "parameters": [
             {
               "name": "Authorization",
-              "in": "header"
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             },
             {
               "name": "idOutlet",
-              "in": "path"
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
             }
           ],
           "requestBody": {
@@ -112,11 +120,19 @@
           "parameters": [
             {
               "name": "Authorization",
-              "in": "header"
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             },
             {
               "name": "idOutlet",
-              "in": "path"
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
             }
           ],
           "responses": {
@@ -172,15 +188,27 @@
           "parameters": [
             {
               "name": "Authorization",
-              "in": "header"
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             },
             {
               "name": "idOutlet",
-              "in": "path"
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
             },
             {
               "name": "idEmployee",
-              "in": "path"
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
             }
           ],
           "responses": {
@@ -234,15 +262,27 @@
           "parameters": [
             {
               "name": "Authorization",
-              "in": "header"
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             },
             {
               "name": "idOutlet",
-              "in": "path"
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
             },
             {
               "name": "idEmployee",
-              "in": "path"
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
             }
           ],
           "requestBody": {
@@ -333,15 +373,27 @@
           "parameters": [
             {
               "name": "Authorization",
-              "in": "header"
+              "in": "header",
+              "required": true,
+              "schema": {
+                "type": "string"
+              }
             },
             {
               "name": "idOutlet",
-              "in": "path"
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
             },
             {
               "name": "idEmployee",
-              "in": "path"
+              "in": "path",
+              "required": true,
+              "schema": {
+                "type": "integer"
+              }
             }
           ],
           "responses": {
