@@ -23,7 +23,7 @@
                   "value" : {
                     "name" : "Fakhrul Amin", 
                     "email" : "amin@example.com",
-                    "contact" : "0856732893928", 
+                    "phone" : "0856732893928", 
                     "password" : "password"
                   }
                 }
@@ -33,7 +33,7 @@
                 "required": [
                   "name",
                   "email",
-                  "contact",
+                  "phone",
                   "password"
                 ],
                 "properties": {
@@ -43,7 +43,7 @@
                   "email" : {
                     "type": "string"
                   },
-                  "contact" : {
+                  "phone" : {
                     "type": "string"
                   },
                   "password" : {
@@ -72,9 +72,9 @@
                           "email must not be blank",
                           "email must contain @"
                         ],
-                        "contact" : [
-                          "contact must not be blank",
-                          "contact must be a number"
+                        "phone" : [
+                          "phone must not be blank",
+                          "phone must be a number"
                         ]
                       }
                     }
@@ -95,7 +95,7 @@
                         "id" : 1,
                         "name" : "Fakhrul Amin",
                         "email" : "amin@example.com",
-                        "contact" : "0856732893928"
+                        "phone" : "0856732893928"
                       }
                     }
                   }
@@ -115,7 +115,7 @@
                         "email" : {
                           "type": "string"
                         },
-                        "contact" : {
+                        "phone" : {
                           "type": "string"
                         }
                       }
@@ -142,7 +142,7 @@
                   "description" : "Login user amin",
                   "value" : {
                     "email" : "amin@example.com", 
-                    "contact" : "0856732893928", 
+                    "phone" : "0856732893928", 
                     "password" : "password"
                   }
                 }
@@ -151,14 +151,14 @@
                 "type": "object",
                 "required": [
                   "email",
-                  "contact",
+                  "phone",
                   "password"
                 ],
                 "properties": {
                   "email" : {
                     "type": "string"
                   },
-                  "contact" : {
+                  "phone" : {
                     "type": "string"
                   },
                   "password" : {
@@ -182,7 +182,7 @@
                         "id" : 1,
                         "name" : "Fakhrul Amin",
                         "email" : "amin@example.com",
-                        "contact" : "0856732893928",
+                        "phone" : "0856732893928",
                         "token" : "12h1ni2xuhhor7ywqhdkshfk"
                       },
                       "errors" : {}
@@ -204,7 +204,7 @@
                         "email" : {
                           "type": "string"
                         },
-                        "contact" : {
+                        "phone" : {
                           "type": "string"
                         },
                         "token" : {
@@ -253,7 +253,7 @@
                         "email" : {
                           "type": "string"
                         },
-                        "contact" : {
+                        "phone" : {
                           "type": "string"
                         }
                       }
@@ -286,7 +286,7 @@
                   "email" : {
                     "type": "string"
                   },
-                  "contact" : {
+                  "phone" : {
                     "type": "string"
                   },
                   "password" : {
@@ -317,7 +317,7 @@
                         "email" : {
                           "type": "string"
                         },
-                        "contact" : {
+                        "phone" : {
                           "type": "string"
                         }
                       }
