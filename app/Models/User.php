@@ -14,6 +14,14 @@ class User extends Model
     public $timestamps = true;
     public $incrementing = true;
 
+    protected $fillable = [
+        'name', 
+        'email',
+        'phone',
+        'password'
+    ];
+
+
     public function outlet(): HasMany
     {
         return $this->hasMany(Outlet::class, 'user_id', 'id');
