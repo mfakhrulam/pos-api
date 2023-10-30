@@ -16,7 +16,7 @@ class UserController extends Controller
     {
         $data = $request->validated();
 
-        if(User::where('email', $data['email'])->where('phone', $data['phone'])->count() == 1)
+        if(User::where('email', $data['email'])->orWhere('phone', $data['phone'])->count() == 1)
         {
             // ada di database?
             throw new HttpResponseException(response([
