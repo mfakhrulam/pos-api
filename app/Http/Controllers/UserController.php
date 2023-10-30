@@ -28,7 +28,7 @@ class UserController extends Controller
                         'phone already registered'
                     ]
                 ]
-            ]), 400);
+            ], 400));
         }
 
         $user = new User($data);
