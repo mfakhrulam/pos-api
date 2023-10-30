@@ -77,12 +77,11 @@ class UserTest extends TestCase
         ]);
     }
 
-    public function testLoginSuccess(): void
+    public function testLoginSuccessWithPhone(): void
     {
         $this->seed([UserSeeder::class]);
         $this->post('/api/users/login', [
-            'phone' => '0888888888',
-            'email' => 'test@mail.com',
+            'email_or_phone' => '0888888888',
             'password' => '12345678'
         ])->assertStatus(200)
         ->assertJson([
@@ -95,16 +94,49 @@ class UserTest extends TestCase
 
         $user = User::where('email', 'test@mail.com')->first();
         self::assertNotNull($user->token);
+    }
 
+    public function testLoginSuccessWithEmail(): void
+    {
+        $this->seed([UserSeeder::class]);
+        $this->post('/api/users/login', [
+            'email_or_phone' => 'test@mail.com',
+            'password' => '12345678'
+        ])->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'test',
+                'phone' => '0888888888',
+                'email' => 'test@mail.com',
+            ]
+        ]);
+
+        $user = User::where('email', 'test@mail.com')->first();
+        self::assertNotNull($user->token);
     }
     
     public function testLoginFailedPhoneOrEmailNotFound(): void
     {
         $this->seed([UserSeeder::class]);
         $this->post('/api/users/login', [
-            'phone' => '08888888882',
-            'email' => 'amin@mail.com',
+            'email_or_phone' => 'amin@mail.com',
             'password' => '12345678'
+        ])->assertStatus(401)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'phone or email or password wrong'
+                ]
+            ]
+        ]);
+    }
+
+    public function testLoginFailedPasswordWrong(): void
+    {
+        $this->seed([UserSeeder::class]);
+        $this->post('/api/users/login', [
+            'email_or_phone' => 'mail@mail.com',
+            'password' => '123456789'
         ])->assertStatus(401)
         ->assertJson([
             'errors' => [

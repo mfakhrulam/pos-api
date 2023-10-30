@@ -141,8 +141,7 @@
                 "amin" : {
                   "description" : "Login user amin",
                   "value" : {
-                    "email" : "amin@example.com", 
-                    "phone" : "0856732893928", 
+                    "email_or_phone" : "amin@example.com|0856732893928", 
                     "password" : "password"
                   }
                 }
@@ -150,15 +149,11 @@
               "schema" : {
                 "type": "object",
                 "required": [
-                  "email",
-                  "phone",
+                  "email_or_phone",
                   "password"
                 ],
                 "properties": {
-                  "email" : {
-                    "type": "string"
-                  },
-                  "phone" : {
+                  "email_or_phone" : {
                     "type": "string"
                   },
                   "password" : {
@@ -291,6 +286,9 @@
               "schema" : {
                 "type": "object",
                 "properties": {
+                  "name" : {
+                    "type": "string"
+                  },
                   "email" : {
                     "type": "string"
                   },

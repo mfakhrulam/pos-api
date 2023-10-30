@@ -43,13 +43,8 @@ class UserController extends Controller
     public function login(UserLoginRequest $request): UserResource
     {
         $data = $request->validated();
-        if($data['email']) {
-            $user = User::where('email', $data['email'])->first();
-        }
-        if($data['phone']) {
-            $user = User::where('phone', $data['phone'])->first();
-        }
-
+        $user = User::where('email', $data['email_or_phone'])->orWhere('phone', $data['email_or_phone'])->first();
+       
         if(!$user || !Hash::check($data['password'], $user->password)) {
             throw new HttpResponseException(response([
                 'errors' => [
