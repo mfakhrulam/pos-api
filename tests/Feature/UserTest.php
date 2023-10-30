@@ -2,6 +2,8 @@
 
 namespace Tests\Feature;
 
+use App\Models\User;
+use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
@@ -71,6 +73,44 @@ class UserTest extends TestCase
                 'email' => [
                     'email already registered'
                 ],
+            ]
+        ]);
+    }
+
+    public function testLoginSuccess(): void
+    {
+        $this->seed([UserSeeder::class]);
+        $this->post('/api/users/login', [
+            'phone' => '0888888888',
+            'email' => 'test@mail.com',
+            'password' => '12345678'
+        ])->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'test',
+                'phone' => '0888888888',
+                'email' => 'test@mail.com',
+            ]
+        ]);
+
+        $user = User::where('email', 'test@mail.com')->first();
+        self::assertNotNull($user->token);
+
+    }
+    
+    public function testLoginFailedPhoneOrEmailNotFound(): void
+    {
+        $this->seed([UserSeeder::class]);
+        $this->post('/api/users/login', [
+            'phone' => '08888888882',
+            'email' => 'amin@mail.com',
+            'password' => '12345678'
+        ])->assertStatus(401)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'phone or email or password wrong'
+                ]
             ]
         ]);
     }
