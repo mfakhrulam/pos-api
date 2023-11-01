@@ -19,6 +19,7 @@ class UserSeeder extends Seeder
             'email' => 'test@mail.com',
             'phone' => '0888888888',
             'password' => Hash::make('12345678'),
+            'token' => 'test'
         ]);
     }
 }
