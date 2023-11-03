@@ -35,7 +35,7 @@ class User extends Model implements Authenticatable
      */
     public function getAuthIdentifierName() 
     {
-        return 'phone';
+        return 'email';
     }
 
     /**
@@ -45,7 +45,7 @@ class User extends Model implements Authenticatable
      */
     public function getAuthIdentifier()
     {
-        return $this->phone;
+        return $this->email;
     }
 
     /**

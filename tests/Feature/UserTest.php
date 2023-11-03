@@ -193,5 +193,122 @@ class UserTest extends TestCase
             ]
         ]);
     }
+
+    public function testUpdatePasswordSuccess(): void
+    {
+        $this->seed([UserSeeder::class]);
+        $oldUser = User::where('email', 'test@mail.com')->first();
+
+        $this->patch('api/users/current', 
+            [
+                'password' => 'password_changed'
+            ],
+            [
+                'Authorization' => 'test'
+            ]
+        )->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'test',
+                'phone' => '0888888888',
+                'email' => 'test@mail.com',
+            ]
+        ]);
+        $newUser = User::where('email', 'test@mail.com')->first();
+        self::assertNotEquals($oldUser->password, $newUser->password);
+    }
+
+    public function testUpdateNameSuccess(): void
+    {
+        $this->seed([UserSeeder::class]);
+        $oldUser = User::where('email', 'test@mail.com')->first();
+
+        $this->patch('api/users/current', 
+            [
+                'name' => 'amin'
+            ],
+            [
+                'Authorization' => 'test'
+            ]
+        )->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'amin',
+                'phone' => '0888888888',
+                'email' => 'test@mail.com',
+            ]
+        ]);
+        $newUser = User::where('email', 'test@mail.com')->first();
+        self::assertNotEquals($oldUser->name, $newUser->name);
+        
+    }
+
+    public function testUpdatePhoneSuccess(): void
+    {
+        $this->seed([UserSeeder::class]);
+        $oldUser = User::where('email', 'test@mail.com')->first();
+
+        $this->patch('api/users/current', 
+            [
+                'phone' => '08987654321'
+            ],
+            [
+                'Authorization' => 'test'
+            ]
+        )->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'test',
+                'phone' => '08987654321',
+                'email' => 'test@mail.com',
+            ]
+        ]);
+        $newUser = User::where('email', 'test@mail.com')->first();
+        self::assertNotEquals($oldUser->phone, $newUser->phone);
+        
+    }
+
+    public function testUpdatePhoneFailed(): void
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->patch('api/users/current', 
+            [
+                'phone' => '08123456789'
+            ],
+            [
+                'Authorization' => 'test'
+            ]
+        )->assertStatus(400)
+        ->assertJson([
+            'errors' => [
+                'phone' => [
+                    'phone already registered'
+                ]
+            ]
+        ]);
+    }
+
+    public function testUpdateFailed(): void
+    {
+        $this->seed([UserSeeder::class]);
+
+        $this->patch('api/users/current', 
+            [
+                'name' => 'AminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAmin'
+            ],
+            [
+                'Authorization' => 'test'
+            ]
+        )->assertStatus(400)
+        ->assertJson([
+            'errors' => [
+                'name' => [
+                    'The name field must not be greater than 50 characters.'
+                ]
+            ]
+        ]);
+        
+    }
     
 }
