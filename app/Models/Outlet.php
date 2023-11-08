@@ -15,6 +15,14 @@ class Outlet extends Model
     public $timestamps = true;
     public $incrementing = true;
 
+    protected $fillable = [
+        'name',
+        'address',
+        'phone',
+        'email',
+        'is_active'
+    ];
+
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class, 'user_id', 'id');

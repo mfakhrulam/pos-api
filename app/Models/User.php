@@ -23,7 +23,7 @@ class User extends Model implements Authenticatable
     ];
 
 
-    public function outlet(): HasMany
+    public function outlets(): HasMany
     {
         return $this->hasMany(Outlet::class, 'user_id', 'id');
     }
