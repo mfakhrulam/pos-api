@@ -32,5 +32,9 @@ Route::middleware(ApiAuthMiddleware::class)->group(function() {
   Route::delete('/users/logout', [UserController::class, 'logout']);
 
   Route::post('/outlets', [OutletController::class, 'create']);
+  Route::get('/outlets', [OutletController::class, 'getAll']);
+  Route::get('/outlets/{id}', [OutletController::class, 'get'])->where('id', '[0-9]+');
+  Route::put('/outlets/{id}', [OutletController::class, 'update'])->where('id', '[0-9]+');
+  Route::delete('/outlets/{id}', [OutletController::class, 'delete'])->where('id', '[0-9]+');
   
 });

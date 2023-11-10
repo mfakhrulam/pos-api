@@ -23,11 +23,11 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name' => 'fakhrul',
-            'email' => 'fakhrul@mail.com',
+            'name' => 'test2',
+            'email' => 'test2@mail.com',
             'phone' => '08123456789',
             'password' => Hash::make('12345678'),
-            'token' => 'fakhrul'
+            'token' => 'test2'
         ]);
     }
 }
