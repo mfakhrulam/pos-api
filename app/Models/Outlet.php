@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Outlet extends Model
 {
@@ -28,8 +28,8 @@ class Outlet extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    public function employees(): HasMany
+    public function employees(): BelongsToMany
     {
-        return $this->hasMany(Employee::class, 'outlet_id', 'id');
+        return $this->belongsToMany(Employee::class, 'employees_outlets', 'outlet_id', 'employee_id');
     }
 }

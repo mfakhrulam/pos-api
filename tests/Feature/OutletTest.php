@@ -8,6 +8,7 @@ use Database\Seeders\OutletSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class OutletTest extends TestCase
@@ -228,7 +229,32 @@ class OutletTest extends TestCase
         ])->assertStatus(200)->json();
 
         self::assertEquals(10, count($response['data']));
-
     }
 
+    public function testGetAllEmpty(): void
+    {
+        $this->seed([UserSeeder::class, OutletListSeeder::class]);
+
+        $response = $this->get('api/outlets', [
+            'Authorization' => 'test2'
+        ])->assertStatus(200)->json();
+
+        self::assertEmpty($response['data']);
+    }   
+
+    public function testGetAllUnauthorized(): void
+    {
+        $this->seed([UserSeeder::class, OutletListSeeder::class]);
+
+        $this->get('api/outlets', [
+            'Authorization' => ''
+        ])->assertStatus(401)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'Unauthorized'
+                ]
+            ]
+        ]);
+    }
 }
