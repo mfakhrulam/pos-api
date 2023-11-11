@@ -2,7 +2,10 @@
 
 namespace Tests\Feature;
 
+use App\Models\Employee;
 use App\Models\Outlet;
+use Database\Seeders\EmployeeSeeder;
+use Database\Seeders\OutletListSeeder;
 use Database\Seeders\OutletSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -17,15 +20,15 @@ class EmployeeTest extends TestCase
      */
     public function testCreateSuccess(): void
     {
-        $this->seed([UserSeeder::class, OutletSeeder::class]);
-        $outlet = Outlet::query()->limit(1)->first();
-        $this->post('/api/employees', [
+        $this->seed([UserSeeder::class, OutletListSeeder::class]);
+        $outlet = Outlet::query()->limit(2)->get();
+        $response = $this->post('/api/employees', [
             'name' => 'test',
             'phone' => '08123456789',
             'pin' => '1234',
             'email' => '',
             'role' => '1',
-            'outletIds' => [$outlet->id]
+            'outletIds' => [$outlet[0]->id, $outlet[1]->id]
         ], [
             'Authorization' => 'test'
         ])->assertStatus(201)
@@ -37,7 +40,10 @@ class EmployeeTest extends TestCase
                 'role' => '1',
                 'outlets' => array()
             ]
-        ]);
+        ])->json();
+
+        // test that there are 2 outlets
+        self::assertEquals(2, count($response['data']['outlets']));
     }
 
     public function testCreateFailed(): void
@@ -69,7 +75,6 @@ class EmployeeTest extends TestCase
 
     public function testCreateUnauthorized(): void
     {
-        
         $this->seed([UserSeeder::class, OutletSeeder::class]);
         $outlet = Outlet::query()->limit(1)->first();
         $this->post('/api/employees', [
@@ -86,6 +91,76 @@ class EmployeeTest extends TestCase
             'errors' => [
                 'message' => [
                     'Unauthorized'
+                ]
+            ]
+        ]);
+    }
+
+    public function testGetSuccess(): void
+    {
+        $this->testCreateSuccess();
+        $employee = Employee::query()->limit(1)->first();
+        
+        $this->get('api/employees/'. $employee->id, [
+            'Authorization' => 'test'
+        ])->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'test',
+                'phone' => '08123456789',
+                'email' => '',
+                'role' => 'Kasir',
+                'outlets' => array()
+            ]
+        ])->json();
+    }
+    
+    public function testGetEmployeeNotFound(): void
+    {
+        $this->testCreateSuccess();
+        $employee = Employee::query()->limit(1)->first();
+        
+        $this->get('api/employees/'. ($employee->id + 1), [
+            'Authorization' => 'test'
+        ])->assertStatus(404)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'Employee not found'
+                ]
+            ]
+        ]);        
+    }
+
+    public function testGetEmployeeUnauthorized(): void
+    {
+        $this->testCreateSuccess();
+        $employee = Employee::query()->limit(1)->first();
+        
+        $this->get('api/employees/'. ($employee->id + 1), [
+            'Authorization' => 'salah token'
+        ])->assertStatus(401)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'Unauthorized'
+                ]
+            ]
+        ]);        
+    }
+
+    public function testGetOtherUserEmployee(): void
+    {
+        $this->seed([UserSeeder::class, EmployeeSeeder::class]);
+        $employee = Employee::query()->limit(1)->first();
+
+        $this->get('api/employees/'.$employee->id, [
+            'Authorization' => 'test2'
+        ])->assertStatus(404)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'Employee not found'
                 ]
             ]
         ]);

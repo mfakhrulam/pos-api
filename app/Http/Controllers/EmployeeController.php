@@ -2,16 +2,34 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\EmployeeCreateRequest;
+use App\Http\Requests\EmployeeRequest;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
+use App\Models\User;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
-    public function create(EmployeeCreateRequest $request): JsonResponse
+    private function getEmployee(User $user, int $idEmployee): Employee
+    {
+        $employee = Employee::where('id', $idEmployee)->where('user_id', $user->id)->first();
+        if(!$employee) {
+            throw new HttpResponseException(response()->json([
+                'errors' => [
+                    'message' => [
+                        'Employee not found'
+                    ]
+                ]
+            ])->setStatusCode(404));
+        }
+
+        return $employee;
+    }
+
+    public function create(EmployeeRequest $request): JsonResponse
     {
         $data = $request->validated();
         $user = Auth::user();
@@ -28,6 +46,16 @@ class EmployeeController extends Controller
         $employee->save();
         $employee->outlets()->attach($data['outletIds']);
 
-        return (new EmployeeResource($employee))->response()->setStatusCode(201);
+        return (new EmployeeResource($employee->loadMissing('outlets')))->response()->setStatusCode(201);
     }
+
+    public function get(int $id): EmployeeResource
+    {
+        $user = Auth::user();
+        $employee = $this->getEmployee($user, $id);
+
+        return new EmployeeResource($employee->loadMissing('outlets'));
+    }
+
+    
 }
