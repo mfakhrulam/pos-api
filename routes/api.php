@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\ApiAuthMiddleware;
@@ -37,4 +38,5 @@ Route::middleware(ApiAuthMiddleware::class)->group(function() {
   Route::put('/outlets/{id}', [OutletController::class, 'update'])->where('id', '[0-9]+');
   Route::delete('/outlets/{id}', [OutletController::class, 'delete'])->where('id', '[0-9]+');
   
+  Route::post('/employees', [EmployeeController::class, 'create']);
 });

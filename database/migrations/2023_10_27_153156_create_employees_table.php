@@ -18,10 +18,10 @@ return new class extends Migration
             $table->string('pin', 4)->nullable(false);
             $table->string('email', 100)->nullable();
             $table->enum('role', ['Kasir', 'Manajer', 'Pemilik', 'Superadmin'])->nullable(false);
-            $table->unsignedBigInteger('outlet_id')->nullable(false);
+            $table->unsignedBigInteger('user_id')->nullable(false);
             $table->timestamps();
 
-            $table->foreign('outlet_id')->on('outlets')->references('id');
+            $table->foreign('user_id')->on('users')->references('id')->onDelete('cascade');
         });
     }
 
