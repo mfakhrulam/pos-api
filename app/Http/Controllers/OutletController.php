@@ -6,6 +6,7 @@ use App\Http\Requests\OutletCreateRequest;
 use App\Http\Requests\OutletUpdateRequest;
 use App\Http\Resources\OutletResource;
 use App\Models\Outlet;
+use App\Models\User;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -13,6 +14,22 @@ use Illuminate\Support\Facades\Auth;
 
 class OutletController extends Controller
 {
+    private function getOutlet(User $user, int $idOutlet): Outlet
+    {
+        $outlet = Outlet::where('id', $idOutlet)->where('user_id', $user->id)->first();
+        if(!$outlet) {
+            throw new HttpResponseException(response()->json([
+                'errors' => [
+                    'message' => [
+                        'Outlet not found'
+                    ]
+                ]
+            ])->setStatusCode(404));
+        }
+
+        return $outlet;
+    }
+
     public function create(OutletCreateRequest $request): JsonResponse
     {
         $data = $request->validated();
@@ -28,16 +45,7 @@ class OutletController extends Controller
     public function get(int $id): OutletResource
     {
         $user = Auth::user();
-        $outlet = Outlet::where('id', $id)->where('user_id', $user->id)->first();
-        if(!$outlet) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    'message' => [
-                        'Outlet not found'
-                    ]
-                ]
-            ])->setStatusCode(404));
-        }
+        $outlet = $this->getOutlet($user, $id);
 
         return new OutletResource($outlet);
     }
@@ -45,16 +53,7 @@ class OutletController extends Controller
     public function update(int $id, OutletUpdateRequest $request): OutletResource
     {
         $user = Auth::user();
-        $outlet = Outlet::where('id', $id)->where('user_id', $user->id)->first();
-        if(!$outlet) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    'message' => [
-                        'Outlet not found'
-                    ]
-                ]
-            ])->setStatusCode(404));
-        }
+        $outlet = $this->getOutlet($user, $id);
 
         $data = $request->validated();
         $outlet->fill($data);
@@ -66,16 +65,7 @@ class OutletController extends Controller
     public function delete(int $id): JsonResponse
     {
         $user = Auth::user();
-        $outlet = Outlet::where('id', $id)->where('user_id', $user->id)->first();
-        if(!$outlet) {
-            throw new HttpResponseException(response()->json([
-                'errors' => [
-                    'message' => [
-                        'Outlet not found'
-                    ]
-                ]
-            ])->setStatusCode(404));
-        }
+        $outlet = $this->getOutlet($user, $id);
 
         $outlet->delete();
         return response()->json([
