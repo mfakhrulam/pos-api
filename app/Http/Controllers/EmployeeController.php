@@ -57,5 +57,15 @@ class EmployeeController extends Controller
         return new EmployeeResource($employee->loadMissing('outlets'));
     }
 
-    
+    public function update(EmployeeRequest $request, int $id): EmployeeResource
+    {
+        $data = $request->validated();
+        $user = Auth::user();
+        $employee = $this->getEmployee($user, $id);
+        $employee->fill(collect($data)->except('outletIds')->toArray());
+        $employee->save();
+        $employee->outlets()->sync($data['outletIds']);
+
+        return new EmployeeResource($employee->loadMissing('outlets'));
+    }
 }

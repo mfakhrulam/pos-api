@@ -40,4 +40,6 @@ Route::middleware(ApiAuthMiddleware::class)->group(function() {
   
   Route::post('/employees', [EmployeeController::class, 'create']);
   Route::get('/employees/{id}', [EmployeeController::class, 'get'])->where('id', '[0-9]+');
+  Route::put('/employees/{id}', [EmployeeController::class, 'update'])->where('id', '[0-9]+');
+
 });
