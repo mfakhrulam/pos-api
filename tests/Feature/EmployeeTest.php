@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Employee;
 use App\Models\Outlet;
+use Database\Seeders\EmployeeListSeeder;
 use Database\Seeders\EmployeeSeeder;
 use Database\Seeders\OutletListSeeder;
 use Database\Seeders\OutletSeeder;
@@ -37,7 +38,7 @@ class EmployeeTest extends TestCase
                 'name' => 'test',
                 'phone' => '08123456789',
                 'email' => '',
-                'role' => '1',
+                'role' => 'Kasir',
                 'outlets' => array()
             ]
         ])->json();
@@ -55,7 +56,7 @@ class EmployeeTest extends TestCase
             'phone' => '08123456789',
             'pin' => 'asdbd',
             'email' => '',
-            'role' => '1',
+            'role' => 'Kasir',
             'outletIds' => [$outlet->id]
         ], [
             'Authorization' => 'test'
@@ -177,7 +178,7 @@ class EmployeeTest extends TestCase
             'phone' => '08123456789',
             'pin' => '1234',
             'email' => '',
-            'role' => 2,
+            'role' => 'Manajer',
             'outletIds' => [$outlet[0]->id, $outlet[1]->id]
         ], [
             'Authorization' => 'test'
@@ -187,7 +188,7 @@ class EmployeeTest extends TestCase
                 'name' => 'test test',
                 'phone' => '08123456789',
                 'email' => '',
-                'role' => 2,
+                'role' => 'Manajer',
                 'outlets' => array()
             ]
         ])->json();
@@ -274,5 +275,71 @@ class EmployeeTest extends TestCase
             ]
         ]);    
     }
+
+    public function testDeleteSuccess(): void
+    {
+        $this->testCreateSuccess();
+        $employee = Employee::query()->limit(1)->first();
+
+        $this->delete('api/employees/'.$employee->id, [], [
+            'Authorization' => 'test'
+        ])->assertStatus(200)
+        ->assertJson([
+            'data' => true
+        ]);
+    }
+
+    public function testDeleteNotFound(): void
+    {
+        $this->testCreateSuccess();
+        $employee = Employee::query()->limit(1)->first();
+
+        $this->delete('api/employees/'.($employee->id+1), [], [
+            'Authorization' => 'test'
+        ])->assertStatus(404)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'Employee not found'
+                ]
+            ] 
+        ]);
+    }
+
+    public function testGetAllSuccess(): void
+    {
+        $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
+        $response = $this->get('/api/employees', [
+            'Authorization' => 'test'
+        ])->assertStatus(200)->json();
+        self::assertEquals(5, count($response['data']));
+
+        // Log::info($response);
+
+    }
     
+    public function testGetAllEmpty(): void
+    {
+        $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
+        $response = $this->get('/api/employees', [
+            'Authorization' => 'test2'
+        ])->assertStatus(200)->json();
+        self::assertEquals(0, count($response['data']));
+        self::assertEmpty($response['data']);
+    }
+
+    public function testGetAllUnauthorized(): void
+    {
+        $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
+        $this->get('/api/employees', [
+            'Authorization' => ''
+        ])->assertStatus(401)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'Unauthorized'
+                ]
+            ]
+        ]);
+    }
 }

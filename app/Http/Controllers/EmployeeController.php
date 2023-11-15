@@ -13,6 +13,17 @@ use Illuminate\Support\Facades\Auth;
 
 class EmployeeController extends Controller
 {
+    private $roleEnum = array(
+        1 => "Kasir",
+        2 => "Manajer",
+        3 => "Pemilik",
+        4 => "Superadmin",
+        "Kasir" => "Kasir",
+        "Manajer" => "Manajer",
+        "Pemilik" => "Pemilik",
+        "Superadmin" => "Superadmin"
+    );
+
     private function getEmployee(User $user, int $idEmployee): Employee
     {
         $employee = Employee::where('id', $idEmployee)->where('user_id', $user->id)->first();
@@ -40,7 +51,7 @@ class EmployeeController extends Controller
         $employee->phone = $data['phone'];
         $employee->pin = $data['pin'];
         $employee->email = $data['email'];
-        $employee->role = $data['role'];
+        $employee->role = $this->roleEnum[$data['role']];
         $employee->user_id = $user->id;
 
         $employee->save();
@@ -63,9 +74,29 @@ class EmployeeController extends Controller
         $user = Auth::user();
         $employee = $this->getEmployee($user, $id);
         $employee->fill(collect($data)->except('outletIds')->toArray());
+        $employee->role = $this->roleEnum[$data['role']];
         $employee->save();
         $employee->outlets()->sync($data['outletIds']);
 
         return new EmployeeResource($employee->loadMissing('outlets'));
+    }
+
+    public function delete(int $id): JsonResponse
+    {
+        $user = Auth::user();
+        $employee = $this->getEmployee($user, $id);
+
+        $employee->outlets()->detach();
+        $employee->delete();
+        return response()->json([
+            'data' => true
+        ])->setStatusCode(200);
+    }
+
+    public function getAll(): JsonResponse
+    {
+        $user = Auth::user();
+        $employee = Employee::where('user_id', $user->id)->get();
+        return (EmployeeResource::collection($employee))->response()->setStatusCode(200);
     }
 }

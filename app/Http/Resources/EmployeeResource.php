@@ -15,14 +15,12 @@ class EmployeeResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'data' => [
-                'id' => $this->id,
-                'name' => $this->name,
-                'phone' => $this->phone,
-                'email' => $this->email,
-                'role' => $this->role,
-                'outlets' => OutletResource::collection($this->whenLoaded('outlets'))
-            ]
+            'id' => $this->id,
+            'name' => $this->name,
+            'phone' => $this->phone,
+            'email' => $this->email,
+            'role' => $this->role,
+            'outlets' => OutletResource::collection($this->whenLoaded('outlets'))
         ];
     }
 }
