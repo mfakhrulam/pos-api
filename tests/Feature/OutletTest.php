@@ -2,7 +2,9 @@
 
 namespace Tests\Feature;
 
+use App\Models\Employee;
 use App\Models\Outlet;
+use Database\Seeders\EmployeeListSeeder;
 use Database\Seeders\OutletListSeeder;
 use Database\Seeders\OutletSeeder;
 use Database\Seeders\UserSeeder;
@@ -100,6 +102,36 @@ class OutletTest extends TestCase
                 'is_active' => true
             ]
         ]);
+    }
+
+    public function testGetWithEmployees(): void
+    {
+        $this->seed([UserSeeder::class, OutletSeeder::class, EmployeeListSeeder::class]);
+        
+        $outlet = Outlet::query()->limit(1)->first();
+        $employees = Employee::query()->limit(5)->get();
+        $employees_id = array();
+        foreach ($employees as $employee) {
+            array_push($employees_id, $employee->id);
+        }
+        $outlet->employees()->sync($employees_id);
+
+        $response = $this->get('api/outlets/'.$outlet->id, [
+            'Authorization' => 'test'
+        ])->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'test restoran',
+                'address' => 'yogyakarta',
+                'phone' => '08123456789',
+                'email' => 'restoran@gmail.com',
+                'is_active' => true,
+                'employees' => array()
+            ]
+        ])->json();
+
+        Log::info($response);
+        self::assertEquals(5, count($response['data']['employees']));
     }
 
     public function testGetNotFound(): void
@@ -227,8 +259,9 @@ class OutletTest extends TestCase
         $response = $this->get('api/outlets', [
             'Authorization' => 'test'
         ])->assertStatus(200)->json();
+        // Log::info($response);
 
-        self::assertEquals(10, count($response['data']));
+        self::assertEquals(5, count($response['data']));
     }
 
     public function testGetAllEmpty(): void

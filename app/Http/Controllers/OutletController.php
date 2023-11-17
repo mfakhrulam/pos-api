@@ -47,7 +47,7 @@ class OutletController extends Controller
         $user = Auth::user();
         $outlet = $this->getOutlet($user, $id);
 
-        return new OutletResource($outlet);
+        return new OutletResource($outlet->loadMissing('employees'));
     }
 
     public function update(int $id, OutletUpdateRequest $request): OutletResource
@@ -77,6 +77,6 @@ class OutletController extends Controller
     {
         $user = Auth::user();
         $outlets = Outlet::where('user_id', $user->id)->get();
-        return (OutletResource::collection($outlets))->response()->setStatusCode(200);
+        return (OutletResource::collection($outlets->loadMissing('employees')))->response()->setStatusCode(200);
     }
 }

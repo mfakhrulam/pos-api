@@ -21,6 +21,7 @@ class OutletResource extends JsonResource
             'phone' => $this->phone,
             'email' => $this->email,
             'is_active' => $this->is_active,
+            'employees' => EmployeeResource::collection($this->whenLoaded('employees'))
         ];
     }
 }
