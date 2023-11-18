@@ -339,7 +339,7 @@
         }
       }
     }, 
-    "api/users/logout" : {
+    "/api/users/logout" : {
       "delete" : {
         "description" : "Logout current user",
         "parameters": [

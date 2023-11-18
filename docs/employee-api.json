@@ -11,7 +11,7 @@
       }
     ],
     "paths": {
-      "/api/outlets/{idOutlet}/employees": {
+      "/api/employees": {
         "post": {
           "description": "Create new employee",
           "parameters": [
@@ -22,47 +22,77 @@
               "schema": {
                 "type": "string"
               }
-            },
-            {
-              "name": "idOutlet",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
             }
           ],
           "requestBody": {
             "description": "Create new employee",
             "content": {
               "application/json": {
+                "examples": {
+                  "amin" : {
+                    "description" : "Create new employee using number as a role parameters and without email",
+                    "value" : {
+                      "name" : "Amin", 
+                      "phone" : "08123456789", 
+                      "email" : "",
+                      "pin" : "1234",
+                      "role" : 1,
+                      "outletIds": [1]
+                    }
+                  },
+                  "fakhrul" : {
+                    "description" : "Create new employee using string as a role parameters and with an email",
+                    "value" : {
+                      "name" : "Fakhrul", 
+                      "phone" : "08123456789", 
+                      "email" : "fakhrul@gmail.com",
+                      "pin" : "1234",
+                      "role" : "Kasir",
+                      "outletIds": [1, 2]
+                    }
+                  }
+                },
                 "schema": {
                   "type": "object",
                   "required": [
                     "name",
                     "phone",
-                    "role"
+                    "pin",
+                    "role",
+                    "outletIds"
                   ],
                   "properties": {
                     "name": {
-                      "type": "string"
+                      "type": "string", 
+                      "maximum": 50
                     },
                     "phone": {
-                      "type": "string"
+                      "type": "string",
+                      "maximum": 20
                     },
                     "pin": {
-                      "type": "string"
+                      "type": "string",
+                      "maximum": 4,
+                      "minimum": 4
                     },
                     "email": {
-                      "type": "string"
+                      "type": "string",
+                      "maximum": 100
                     },
                     "role": {
                       "type": "string",
                       "enum": [
                         "Kasir",
                         "Manajer",
-                        "Pemilik"
+                        "Pemilik",
+                        "Superadmin"
                       ]
+                    },
+                    "outletIds": {
+                      "type":"array",
+                      "items": {
+                        "type": "integer"
+                      }
                     }
                   }
                 }
@@ -74,6 +104,39 @@
               "description": "Success create new employee",
               "content": {
                 "application/json" : {
+                  "examples": {
+                    "success" : {
+                      "description" : "Success create new employee",
+                      "value" : {
+                        "data": {
+                          "id" : 1,
+                          "name" : "Fakhrul", 
+                          "phone" : "08123456789", 
+                          "email" : "fakhrul@gmail.com",
+                          "role" : "Kasir",
+                          "outlets": [
+                            {
+                              "id": 1,
+                              "name": "Mie Bakso",
+                              "address": "Yogyakarta",
+                              "phone": "08987654321",
+                              "email": "miebakso@gmail.com",
+                              "is_active": true
+                            },
+                            {
+                              "id": 2,
+                              "name": "Mie Bakso 2",
+                              "address": "Yogyakarta",
+                              "phone": "08987654321",
+                              "email": "miebakso2@gmail.com",
+                              "is_active": true
+                            }
+                          ]
+                          
+                        }
+                      }
+                    }
+                  },
                   "schema" : {
                     "type": "object",
                     "properties": {
@@ -100,8 +163,35 @@
                             "enum": [
                               "Kasir",
                               "Manajer",
-                              "Pemilik"
+                              "Pemilik",
+                              "Superadmin"
                             ]
+                          },
+                          "outlets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "address": {
+                                  "type": "string"
+                                },
+                                "phone": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "is_active": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
                           }
                         }
                       },
@@ -125,14 +215,6 @@
               "schema": {
                 "type": "string"
               }
-            },
-            {
-              "name": "idOutlet",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
             }
           ],
           "responses": {
@@ -140,6 +222,30 @@
               "description": "Get list employees",
               "content": {
                 "application/json": {
+                  "examples": {
+                    "success" : {
+                      "description" : "Success get list employees",
+                      "value" : {
+                        "data": [
+                          {
+                            "id": 1,
+                            "name" : "Fakhrul", 
+                            "phone" : "08123456789", 
+                            "email" : "fakhrul@gmail.com",
+                            "role" : "Kasir"
+                          },
+                          {
+                            "id": 2,
+                            "name" : "Fakhrul2", 
+                            "phone" : "08123456789", 
+                            "email" : "fakhrul2@gmail.com",
+                            "role" : "Kasir"
+                          }
+                        ]
+                        
+                      }
+                    }
+                  },
                   "schema": {
                     "type": "object",
                     "properties": {
@@ -168,7 +274,8 @@
                               "enum": [
                                 "Kasir",
                                 "Manajer",
-                                "Pemilik"
+                                "Pemilik",
+                                "Superadmin"
                               ]
                             }
                           }
@@ -182,7 +289,7 @@
           }
         }
       },
-      "api/outlets/{idOutlet}/employees/{idEmployee}": {
+      "/api/employees/{id}": {
         "get": {
           "description": "Get employee",
           "parameters": [
@@ -195,15 +302,7 @@
               }
             },
             {
-              "name": "idOutlet",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
-            },
-            {
-              "name": "idEmployee",
+              "name": "id",
               "in": "path",
               "required": true,
               "schema": {
@@ -242,7 +341,8 @@
                             "enum": [
                               "Kasir",
                               "Manajer",
-                              "Pemilik"
+                              "Pemilik",
+                              "Superadmin"
                             ]
                           }
                         }
@@ -269,15 +369,7 @@
               }
             },
             {
-              "name": "idOutlet",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
-            },
-            {
-              "name": "idEmployee",
+              "name": "id",
               "in": "path",
               "required": true,
               "schema": {
@@ -294,28 +386,42 @@
                   "required": [
                     "name",
                     "phone",
-                    "role"
+                    "pin",
+                    "role",
+                    "outletIds"
                   ],
                   "properties": {
                     "name": {
-                      "type": "string"
+                      "type": "string", 
+                      "maximum": 50
                     },
                     "phone": {
-                      "type": "string"
+                      "type": "string",
+                      "maximum": 20
                     },
                     "pin": {
-                      "type": "string"
+                      "type": "string",
+                      "maximum": 4,
+                      "minimum": 4
                     },
                     "email": {
-                      "type": "string"
+                      "type": "string",
+                      "maximum": 100
                     },
                     "role": {
                       "type": "string",
                       "enum": [
                         "Kasir",
                         "Manajer",
-                        "Pemilik"
+                        "Pemilik",
+                        "Superadmin"
                       ]
+                    },
+                    "outletIds": {
+                      "type":"array",
+                      "items": {
+                        "type": "integer"
+                      }
                     }
                   }
                 }
@@ -353,8 +459,35 @@
                             "enum": [
                               "Kasir",
                               "Manajer",
-                              "Pemilik"
+                              "Pemilik",
+                              "Superadmin"
                             ]
+                          },
+                          "outlets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "address": {
+                                  "type": "string"
+                                },
+                                "phone": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "is_active": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
                           }
                         }
                       },
@@ -380,15 +513,7 @@
               }
             },
             {
-              "name": "idOutlet",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
-            },
-            {
-              "name": "idEmployee",
+              "name": "id",
               "in": "path",
               "required": true,
               "schema": {

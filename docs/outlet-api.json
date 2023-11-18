@@ -208,6 +208,38 @@
                           },
                           "is_active": {
                             "type": "boolean"
+                          }, 
+                          "employees": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id" : {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "phone": {
+                                  "type": "string"
+                                },
+                                "pin": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "role": {
+                                  "type": "string",
+                                  "enum": [
+                                    "Kasir",
+                                    "Manajer",
+                                    "Pemilik",
+                                    "Superadmin"
+                                  ]
+                                }
+                              }
+                            }
                           }
                         }
                       },
