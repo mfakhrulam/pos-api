@@ -21,10 +21,6 @@ class EmployeeController extends Controller
         2 => "Manajer",
         3 => "Pemilik",
         4 => "Superadmin",
-        "Kasir" => "Kasir",
-        "Manajer" => "Manajer",
-        "Pemilik" => "Pemilik",
-        "Superadmin" => "Superadmin"
     );
 
     private function getEmployee(User $user, int $idEmployee): Employee
@@ -54,7 +50,7 @@ class EmployeeController extends Controller
         $employee->phone = $data['phone'];
         $employee->pin = $data['pin'];
         $employee->email = $data['email'];
-        $employee->role = $this->roleEnum[$data['role']];
+        $employee->role = is_numeric($data['role']) ? $this->roleEnum[$data['role']] : $data['role'];
         $employee->user_id = $user->id;
 
         $employee->save();
@@ -77,7 +73,7 @@ class EmployeeController extends Controller
         $user = Auth::user();
         $employee = $this->getEmployee($user, $id);
         $employee->fill(collect($data)->except('outletIds')->toArray());
-        $employee->role = $this->roleEnum[$data['role']];
+        $employee->role = is_numeric($data['role']) ? $this->roleEnum[$data['role']] : $data['role'];
         $employee->save();
         $employee->outlets()->sync($data['outletIds']);
 
