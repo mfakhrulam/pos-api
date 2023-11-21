@@ -39,7 +39,7 @@ Route::middleware(ApiAuthMiddleware::class)->group(function() {
   Route::delete('/outlets/{id}', [OutletController::class, 'delete'])->where('id', '[0-9]+');
   
   Route::post('/employees', [EmployeeController::class, 'create']);
-  Route::get('/employees', [EmployeeController::class, 'getAll']);
+  Route::get('/employees', [EmployeeController::class, 'search']);
   Route::get('/employees/{id}', [EmployeeController::class, 'get'])->where('id', '[0-9]+');
   Route::put('/employees/{id}', [EmployeeController::class, 'update'])->where('id', '[0-9]+');
   Route::delete('/employees/{id}', [EmployeeController::class, 'delete'])->where('id', '[0-9]+');

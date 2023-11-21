@@ -3,13 +3,16 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\EmployeeRequest;
+use App\Http\Resources\EmployeeCollectionResource;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class EmployeeController extends Controller
 {
@@ -93,10 +96,30 @@ class EmployeeController extends Controller
         ])->setStatusCode(200);
     }
 
-    public function getAll(): JsonResponse
+    public function search(Request $request): JsonResponse
     {
         $user = Auth::user();
-        $employee = Employee::where('user_id', $user->id)->get();
-        return (EmployeeResource::collection($employee))->response()->setStatusCode(200);
+        $employees = Employee::query()->where('user_id', $user->id);
+        Log::info(json_encode($employees));
+
+        $employees = $employees->where(function (Builder $builder) use ($request){
+            $name = $request->input('name');
+            if($name) {
+                $builder->orWhere('name', 'like', '%' . $name . '%');
+            }
+
+            $outletId = $request->input('outletid');
+            if($outletId) {
+                $builder->whereHas('outlets', function (Builder $builder) use ($outletId){
+                    $builder->where('outlet_id', '=', $outletId);
+                });
+            }
+        });
+
+
+        $employees = $employees->get();
+        // return new EmployeeCollectionResource($employees);
+        return (EmployeeResource::collection($employees))->response()->setStatusCode(200);
+
     }
 }

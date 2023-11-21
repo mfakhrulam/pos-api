@@ -5,6 +5,7 @@ namespace Tests\Feature;
 use App\Models\Employee;
 use App\Models\Outlet;
 use Database\Seeders\EmployeeListSeeder;
+use Database\Seeders\EmployeeOutletSeeder;
 use Database\Seeders\EmployeeSeeder;
 use Database\Seeders\OutletListSeeder;
 use Database\Seeders\OutletSeeder;
@@ -306,6 +307,41 @@ class EmployeeTest extends TestCase
         ]);
     }
 
+    public function testSearchByNameSuccess(): void
+    {
+        $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
+        $response = $this->get('/api/employees?name=employee 1', [
+            'Authorization' => 'test'
+        ])->assertStatus(200)->json();
+        self::assertEquals(1, count($response['data']));
+
+        Log::info(json_encode($response, JSON_PRETTY_PRINT));
+    }
+
+    public function testSearchByOutletIdSuccess(): void
+    {
+        $this->seed([UserSeeder::class, EmployeeListSeeder::class, OutletListSeeder::class, EmployeeOutletSeeder::class]);
+        $outlet = Outlet::query()->limit(1)->first();
+
+        $response = $this->get('/api/employees?outletid='.$outlet->id, [
+            'Authorization' => 'test'
+        ])->assertStatus(200)->json();
+
+        // Log::info(json_encode($response, JSON_PRETTY_PRINT));
+    }
+
+    public function testSearchByOutletIAndNameSuccess(): void
+    {
+        $this->seed([UserSeeder::class, EmployeeListSeeder::class, OutletListSeeder::class, EmployeeOutletSeeder::class]);
+        $outlet = Outlet::query()->limit(1)->first();
+
+        $response = $this->get('/api/employees?name=1&outletid='.$outlet->id, [
+            'Authorization' => 'test'
+        ])->assertStatus(200)->json();
+
+        // Log::info(json_encode($response, JSON_PRETTY_PRINT));
+    }
+    
     public function testGetAllSuccess(): void
     {
         $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
@@ -315,7 +351,6 @@ class EmployeeTest extends TestCase
         self::assertEquals(5, count($response['data']));
 
         // Log::info($response);
-
     }
     
     public function testGetAllEmpty(): void
