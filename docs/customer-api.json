@@ -1,8 +1,7 @@
 {
   "openapi": "3.0.2",
   "info": {
-    "title": "Outlets API",
-    "description": "Outlets API",
+    "title": "Customer API Reference",
     "version": "1.0"
   },
   "servers": [
@@ -11,9 +10,9 @@
     }
   ],
   "paths": {
-    "/api/outlets": {
+    "/api/customers": {
       "post": {
-        "description": "Create new outlet",
+        "description": "Create a new customer",
         "parameters": [
           {
             "name": "Authorization",
@@ -25,23 +24,18 @@
           }
         ],
         "requestBody": {
-          "description": "Create new outlet",
+          "description": "Create a new customer",
           "content": {
-            "application./json": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "required": [
                   "name",
-                  "address",
                   "phone",
-                  "email",
-                  "is_active"
+                  "gender"
                 ],
                 "properties": {
                   "name": {
-                    "type": "string"
-                  },
-                  "address": {
                     "type": "string"
                   },
                   "phone": {
@@ -50,8 +44,12 @@
                   "email": {
                     "type": "string"
                   },
-                  "is_active": {
-                    "type": "boolean"
+                  "gender": {
+                    "type": "string",
+                    "enum": [
+                      "Laki-laki",
+                      "Perempuan"
+                    ]
                   }
                 }
               }
@@ -60,7 +58,7 @@
         },
         "responses": {
           "201": {
-            "description": "Success create new outlet",
+            "description": "Success create a customer",
             "content": {
               "application/json": {
                 "schema": {
@@ -75,22 +73,20 @@
                         "name": {
                           "type": "string"
                         },
-                        "address": {
-                          "type": "string"
-                        },
                         "phone": {
                           "type": "string"
                         },
                         "email": {
                           "type": "string"
                         },
-                        "is_active": {
-                          "type": "boolean"
+                        "gender": {
+                          "type": "string",
+                          "enum": [
+                            "Laki-laki",
+                            "Perempuan"
+                          ]
                         }
                       }
-                    },
-                    "errors": {
-                      "type": "object"
                     }
                   }
                 }
@@ -100,7 +96,7 @@
         }
       },
       "get": {
-        "description": "Get list outlet",
+        "description": "Get list customers",
         "parameters": [
           {
             "name": "Authorization",
@@ -113,7 +109,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success get list outlet",
+            "description": "Get list employees",
             "content": {
               "application/json": {
                 "schema": {
@@ -130,26 +126,21 @@
                           "name": {
                             "type": "string"
                           },
-                          "address": {
-                            "type": "string"
-                          },
                           "phone": {
                             "type": "string"
                           },
                           "email": {
                             "type": "string"
                           },
-                          "is_active": {
-                            "type": "boolean"
+                          "gender": {
+                            "type": "string",
+                            "enum": [
+                              "Laki-laki",
+                              "Perempuan"
+                            ]
                           }
                         }
                       }
-                    },
-                    "errors": {
-                      "type": "object"
-                    },
-                    "meta": {
-                      "type": "object"
                     }
                   }
                 }
@@ -159,9 +150,9 @@
         }
       }
     },
-    "/api/outlets/{id}": {
+    "/api/customers/{id}": {
       "get": {
-        "description": "Get outlet",
+        "description": "Get a customer",
         "parameters": [
           {
             "name": "Authorization",
@@ -182,7 +173,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success get outlet",
+            "description": "Success get a customer",
             "content": {
               "application/json": {
                 "schema": {
@@ -197,54 +188,20 @@
                         "name": {
                           "type": "string"
                         },
-                        "address": {
-                          "type": "string"
-                        },
                         "phone": {
                           "type": "string"
                         },
                         "email": {
                           "type": "string"
                         },
-                        "is_active": {
-                          "type": "boolean"
-                        },
-                        "employees": {
-                          "type": "array",
-                          "items": {
-                            "type": "object",
-                            "properties": {
-                              "id": {
-                                "type": "integer"
-                              },
-                              "name": {
-                                "type": "string"
-                              },
-                              "phone": {
-                                "type": "string"
-                              },
-                              "pin": {
-                                "type": "string"
-                              },
-                              "email": {
-                                "type": "string"
-                              },
-                              "role": {
-                                "type": "string",
-                                "enum": [
-                                  "Kasir",
-                                  "Manajer",
-                                  "Pemilik",
-                                  "Superadmin"
-                                ]
-                              }
-                            }
-                          }
+                        "gender": {
+                          "type": "string",
+                          "enum": [
+                            "Laki-laki",
+                            "Perempuan"
+                          ]
                         }
                       }
-                    },
-                    "errors": {
-                      "type": "object"
                     }
                   }
                 }
@@ -254,7 +211,7 @@
         }
       },
       "put": {
-        "description": "Update outlet",
+        "description": "Update a customer",
         "parameters": [
           {
             "name": "Authorization",
@@ -274,23 +231,18 @@
           }
         ],
         "requestBody": {
-          "description": "Update outlet",
+          "description": "Create a new customer",
           "content": {
-            "application./json": {
+            "application/json": {
               "schema": {
                 "type": "object",
                 "required": [
                   "name",
-                  "address",
                   "phone",
-                  "email",
-                  "is_active"
+                  "gender"
                 ],
                 "properties": {
                   "name": {
-                    "type": "string"
-                  },
-                  "address": {
                     "type": "string"
                   },
                   "phone": {
@@ -299,8 +251,12 @@
                   "email": {
                     "type": "string"
                   },
-                  "is_active": {
-                    "type": "boolean"
+                  "gender": {
+                    "type": "string",
+                    "enum": [
+                      "Laki-laki",
+                      "Perempuan"
+                    ]
                   }
                 }
               }
@@ -309,7 +265,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success update outlet",
+            "description": "Success update a customer",
             "content": {
               "application/json": {
                 "schema": {
@@ -324,22 +280,20 @@
                         "name": {
                           "type": "string"
                         },
-                        "address": {
-                          "type": "string"
-                        },
                         "phone": {
                           "type": "string"
                         },
                         "email": {
                           "type": "string"
                         },
-                        "is_active": {
-                          "type": "boolean"
+                        "gender": {
+                          "type": "string",
+                          "enum": [
+                            "Laki-laki",
+                            "Perempuan"
+                          ]
                         }
                       }
-                    },
-                    "errors": {
-                      "type": "object"
                     }
                   }
                 }
@@ -349,7 +303,7 @@
         }
       },
       "delete": {
-        "description": "Delete outlet",
+        "description": "Delete a customer",
         "parameters": [
           {
             "name": "Authorization",
@@ -370,7 +324,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Success delete outlet",
+            "description": "Success delete a customer",
             "content": {
               "application/json": {
                 "schema": {

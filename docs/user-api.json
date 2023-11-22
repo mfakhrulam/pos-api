@@ -12,23 +12,23 @@
   ],
   "paths": {
     "/api/users": {
-      "post" : {
+      "post": {
         "description": "Register new user",
-        "requestBody" : {
+        "requestBody": {
           "content": {
             "application/json": {
               "examples": {
-                "amin" : {
-                  "description" : "Register user amin",
-                  "value" : {
-                    "name" : "Fakhrul Amin", 
-                    "email" : "amin@example.com",
-                    "phone" : "0856732893928", 
-                    "password" : "password"
+                "amin": {
+                  "description": "Register user amin",
+                  "value": {
+                    "name": "Fakhrul Amin",
+                    "email": "amin@example.com",
+                    "phone": "0856732893928",
+                    "password": "password"
                   }
                 }
               },
-              "schema" : {
+              "schema": {
                 "type": "object",
                 "required": [
                   "name",
@@ -37,16 +37,16 @@
                   "password"
                 ],
                 "properties": {
-                  "name" : {
+                  "name": {
                     "type": "string"
                   },
-                  "email" : {
+                  "email": {
                     "type": "string"
                   },
-                  "phone" : {
+                  "phone": {
                     "type": "string"
                   },
-                  "password" : {
+                  "password": {
                     "type": "string"
                   }
                 }
@@ -55,24 +55,24 @@
           }
         },
         "responses": {
-          "400" : {
+          "400": {
             "description": "Validation error",
             "content": {
-              "application/json" : {
-                "examples" : {
-                  "validationerror" : {
-                    "description" : "Validation error",
-                    "value" : {
-                      "errors" : {
-                        "name" : [
+              "application/json": {
+                "examples": {
+                  "validationerror": {
+                    "description": "Validation error",
+                    "value": {
+                      "errors": {
+                        "name": [
                           "name must not be blank",
-                          "name min 4 characters" 
+                          "name min 4 characters"
                         ],
-                        "email" : [
+                        "email": [
                           "email must not be blank",
                           "email must contain @"
                         ],
-                        "phone" : [
+                        "phone": [
                           "phone must not be blank",
                           "phone must be a number"
                         ]
@@ -83,44 +83,44 @@
               }
             }
           },
-          "201" : {
+          "201": {
             "description": "Success register user",
             "content": {
-              "application/json" : {
+              "application/json": {
                 "examples": {
-                  "success" : {
+                  "success": {
                     "description": "Success register user",
-                    "value" : {
-                      "data" : {
-                        "id" : 1,
-                        "name" : "Fakhrul Amin",
-                        "email" : "amin@example.com",
-                        "phone" : "0856732893928"
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "name": "Fakhrul Amin",
+                        "email": "amin@example.com",
+                        "phone": "0856732893928"
                       }
                     }
                   }
                 },
-                "schema" : {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "data" : {
+                    "data": {
                       "type": "object",
                       "properties": {
-                        "id" : {
+                        "id": {
                           "type": "integer"
                         },
-                        "name" : {
+                        "name": {
                           "type": "string"
                         },
-                        "email" : {
+                        "email": {
                           "type": "string"
                         },
-                        "phone" : {
+                        "phone": {
                           "type": "string"
                         }
                       }
                     },
-                    "errors" : {
+                    "errors": {
                       "type": "object"
                     }
                   }
@@ -131,37 +131,32 @@
         }
       }
     },
-    "/api/users/login" : {
-      "post" : {
+    "/api/users/login": {
+      "post": {
         "description": "Login user",
         "requestBody": {
           "content": {
             "application/json": {
               "examples": {
-                "amin" : {
-                  "description" : "Login user amin",
-                  "value" : {
-                    "email" : "amin@example.com", 
-                    "phone" : "0856732893928", 
-                    "password" : "password"
+                "amin": {
+                  "description": "Login user amin",
+                  "value": {
+                    "email_or_phone": "amin@example.com|0856732893928",
+                    "password": "password"
                   }
                 }
               },
-              "schema" : {
+              "schema": {
                 "type": "object",
                 "required": [
-                  "email",
-                  "phone",
+                  "email_or_phone",
                   "password"
                 ],
                 "properties": {
-                  "email" : {
+                  "email_or_phone": {
                     "type": "string"
                   },
-                  "phone" : {
-                    "type": "string"
-                  },
-                  "password" : {
+                  "password": {
                     "type": "string"
                   }
                 }
@@ -170,49 +165,49 @@
           }
         },
         "responses": {
-          "200" : {
+          "200": {
             "description": "Login user amin",
             "content": {
-              "application/json" : {
+              "application/json": {
                 "examples": {
-                  "success" : {
+                  "success": {
                     "description": "Success login user",
-                    "value" : {
-                      "data" : {
-                        "id" : 1,
-                        "name" : "Fakhrul Amin",
-                        "email" : "amin@example.com",
-                        "phone" : "0856732893928",
-                        "token" : "12h1ni2xuhhor7ywqhdkshfk"
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "name": "Fakhrul Amin",
+                        "email": "amin@example.com",
+                        "phone": "0856732893928",
+                        "token": "12h1ni2xuhhor7ywqhdkshfk"
                       },
-                      "errors" : {}
+                      "errors": {}
                     }
                   }
                 },
-                "schema" : {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "data" : {
+                    "data": {
                       "type": "object",
                       "properties": {
-                        "id" : {
+                        "id": {
                           "type": "integer"
                         },
-                        "name" : {
+                        "name": {
                           "type": "string"
                         },
-                        "email" : {
+                        "email": {
                           "type": "string"
                         },
-                        "phone" : {
+                        "phone": {
                           "type": "string"
                         },
-                        "token" : {
+                        "token": {
                           "type": "string"
                         }
                       }
                     },
-                    "errors" : {
+                    "errors": {
                       "type": "object"
                     }
                   }
@@ -221,11 +216,10 @@
             }
           }
         }
-
       }
     },
-    "/api/users/current" : {
-      "get" : {
+    "/api/users/current": {
+      "get": {
         "description": "Get current user",
         "parameters": [
           {
@@ -238,31 +232,31 @@
           }
         ],
         "responses": {
-          "200" : {
+          "200": {
             "description": "Success get current user",
             "content": {
-              "application/json" : {
-                "schema" : {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "data" : {
+                    "data": {
                       "type": "object",
                       "properties": {
-                        "id" : {
+                        "id": {
                           "type": "integer"
                         },
-                        "name" : {
+                        "name": {
                           "type": "string"
                         },
-                        "email" : {
+                        "email": {
                           "type": "string"
                         },
-                        "phone" : {
+                        "phone": {
                           "type": "string"
                         }
                       }
                     },
-                    "errors" : {
+                    "errors": {
                       "type": "object"
                     }
                   }
@@ -272,7 +266,7 @@
           }
         }
       },
-      "patch" : {
+      "patch": {
         "description": "Update current user",
         "parameters": [
           {
@@ -284,20 +278,23 @@
             }
           }
         ],
-        "requestBody" : {
+        "requestBody": {
           "description": "Update current user",
           "content": {
-            "application/json" : {
-              "schema" : {
+            "application/json": {
+              "schema": {
                 "type": "object",
                 "properties": {
-                  "email" : {
+                  "name": {
                     "type": "string"
                   },
-                  "phone" : {
+                  "email": {
                     "type": "string"
                   },
-                  "password" : {
+                  "phone": {
+                    "type": "string"
+                  },
+                  "password": {
                     "type": "string"
                   }
                 }
@@ -306,31 +303,31 @@
           }
         },
         "responses": {
-          "200" : {
+          "200": {
             "description": "Success update user",
             "content": {
-              "application/json" : {
-                "schema" : {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "data" : {
+                    "data": {
                       "type": "object",
                       "properties": {
-                        "id" : {
+                        "id": {
                           "type": "integer"
                         },
-                        "name" : {
+                        "name": {
                           "type": "string"
                         },
-                        "email" : {
+                        "email": {
                           "type": "string"
                         },
-                        "phone" : {
+                        "phone": {
                           "type": "string"
                         }
                       }
                     },
-                    "errors" : {
+                    "errors": {
                       "type": "object"
                     }
                   }
@@ -340,10 +337,10 @@
           }
         }
       }
-    }, 
-    "api/users/logout" : {
-      "delete" : {
-        "description" : "Logout current user",
+    },
+    "/api/users/logout": {
+      "delete": {
+        "description": "Logout current user",
         "parameters": [
           {
             "name": "Authorization",
@@ -354,18 +351,18 @@
             }
           }
         ],
-        "responses" : {
-          "200" : {
-            "description" : "Success logout current user",
-            "content" : {
-              "application/json" : {
-                "schema" : {
-                  "type" : "object",
-                  "properties" : {
-                    "data" : {
+        "responses": {
+          "200": {
+            "description": "Success logout current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
                       "type": "boolean"
                     },
-                    "errors" : {
+                    "errors": {
                       "type": "object"
                     }
                   }
@@ -376,7 +373,5 @@
         }
       }
     }
-
-
   }
 }
