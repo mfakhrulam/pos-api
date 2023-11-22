@@ -215,6 +215,22 @@
               "schema": {
                 "type": "string"
               }
+            },
+            {
+              "name": "name",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "string"
+              }
+            },
+            {
+              "name": "outletid",
+              "in": "query",
+              "required": false,
+              "schema": {
+                "type": "integer"
+              }
             }
           ],
           "responses": {
@@ -344,6 +360,32 @@
                               "Pemilik",
                               "Superadmin"
                             ]
+                          },
+                          "outlets": {
+                            "type": "array",
+                            "items": {
+                              "type": "object",
+                              "properties": {
+                                "id": {
+                                  "type": "integer"
+                                },
+                                "name": {
+                                  "type": "string"
+                                },
+                                "address": {
+                                  "type": "string"
+                                },
+                                "phone": {
+                                  "type": "string"
+                                },
+                                "email": {
+                                  "type": "string"
+                                },
+                                "is_active": {
+                                  "type": "boolean"
+                                }
+                              }
+                            }
                           }
                         }
                       },
