@@ -1,149 +1,279 @@
 {
-    "openapi":"3.0.2",
-    "info": {
-      "title":"Employee API",
-      "description":"Employee API",
-      "version":"1.0"
-    },
-    "servers": [
-      {
-        "url":"http://localhost:8000"
-      }
-    ],
-    "paths": {
-      "/api/employees": {
-        "post": {
-          "description": "Create new employee",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Employee API",
+    "description": "Employee API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000"
+    }
+  ],
+  "paths": {
+    "/api/employees": {
+      "post": {
+        "description": "Create new employee",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          ],
-          "requestBody": {
-            "description": "Create new employee",
-            "content": {
-              "application/json": {
-                "examples": {
-                  "amin" : {
-                    "description" : "Create new employee using number as a role parameters and without email",
-                    "value" : {
-                      "name" : "Amin", 
-                      "phone" : "08123456789", 
-                      "email" : "",
-                      "pin" : "1234",
-                      "role" : 1,
-                      "outletIds": [1]
-                    }
-                  },
-                  "fakhrul" : {
-                    "description" : "Create new employee using string as a role parameters and with an email",
-                    "value" : {
-                      "name" : "Fakhrul", 
-                      "phone" : "08123456789", 
-                      "email" : "fakhrul@gmail.com",
-                      "pin" : "1234",
-                      "role" : "Kasir",
-                      "outletIds": [1, 2]
-                    }
+          }
+        ],
+        "requestBody": {
+          "description": "Create new employee",
+          "content": {
+            "application/json": {
+              "examples": {
+                "amin": {
+                  "description": "Create new employee using number as a role parameters and without email",
+                  "value": {
+                    "name": "Amin",
+                    "phone": "08123456789",
+                    "email": "",
+                    "pin": "1234",
+                    "role": 1,
+                    "outletIds": [
+                      1
+                    ]
                   }
                 },
-                "schema": {
-                  "type": "object",
-                  "required": [
-                    "name",
-                    "phone",
-                    "pin",
-                    "role",
-                    "outletIds"
-                  ],
-                  "properties": {
-                    "name": {
-                      "type": "string", 
-                      "maximum": 50
-                    },
-                    "phone": {
-                      "type": "string",
-                      "maximum": 20
-                    },
-                    "pin": {
-                      "type": "string",
-                      "maximum": 4,
-                      "minimum": 4
-                    },
-                    "email": {
-                      "type": "string",
-                      "maximum": 100
-                    },
-                    "role": {
-                      "type": "string",
-                      "enum": [
-                        "Kasir",
-                        "Manajer",
-                        "Pemilik",
-                        "Superadmin"
-                      ]
-                    },
-                    "outletIds": {
-                      "type":"array",
-                      "items": {
-                        "type": "integer"
-                      }
+                "fakhrul": {
+                  "description": "Create new employee using string as a role parameters and with an email",
+                  "value": {
+                    "name": "Fakhrul",
+                    "phone": "08123456789",
+                    "email": "fakhrul@gmail.com",
+                    "pin": "1234",
+                    "role": "Kasir",
+                    "outletIds": [
+                      1,
+                      2
+                    ]
+                  }
+                }
+              },
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "phone",
+                  "pin",
+                  "role",
+                  "outletIds"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maximum": 50
+                  },
+                  "phone": {
+                    "type": "string",
+                    "maximum": 20
+                  },
+                  "pin": {
+                    "type": "string",
+                    "maximum": 4,
+                    "minimum": 4
+                  },
+                  "email": {
+                    "type": "string",
+                    "maximum": 100
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "Kasir",
+                      "Manajer",
+                      "Pemilik",
+                      "Superadmin"
+                    ]
+                  },
+                  "outletIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
                     }
                   }
                 }
               }
             }
-          },
-          "responses": {
-            "201" : {
-              "description": "Success create new employee",
-              "content": {
-                "application/json" : {
-                  "examples": {
-                    "success" : {
-                      "description" : "Success create new employee",
-                      "value" : {
-                        "data": {
-                          "id" : 1,
-                          "name" : "Fakhrul", 
-                          "phone" : "08123456789", 
-                          "email" : "fakhrul@gmail.com",
-                          "role" : "Kasir",
-                          "outlets": [
-                            {
-                              "id": 1,
-                              "name": "Mie Bakso",
-                              "address": "Yogyakarta",
-                              "phone": "08987654321",
-                              "email": "miebakso@gmail.com",
-                              "is_active": true
-                            },
-                            {
-                              "id": 2,
-                              "name": "Mie Bakso 2",
-                              "address": "Yogyakarta",
-                              "phone": "08987654321",
-                              "email": "miebakso2@gmail.com",
-                              "is_active": true
-                            }
-                          ]
-                          
-                        }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success create new employee",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "description": "Success create new employee",
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "name": "Fakhrul",
+                        "phone": "08123456789",
+                        "email": "fakhrul@gmail.com",
+                        "role": "Kasir",
+                        "outlets": [
+                          {
+                            "id": 1,
+                            "name": "Mie Bakso",
+                            "address": "Yogyakarta",
+                            "phone": "08987654321",
+                            "email": "miebakso@gmail.com",
+                            "is_active": true
+                          },
+                          {
+                            "id": 2,
+                            "name": "Mie Bakso 2",
+                            "address": "Yogyakarta",
+                            "phone": "08987654321",
+                            "email": "miebakso2@gmail.com",
+                            "is_active": true
+                          }
+                        ]
                       }
                     }
-                  },
-                  "schema" : {
-                    "type": "object",
-                    "properties": {
-                      "data" : {
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "pin": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "Kasir",
+                            "Manajer",
+                            "Pemilik",
+                            "Superadmin"
+                          ]
+                        },
+                        "outlets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "address": {
+                                "type": "string"
+                              },
+                              "phone": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_active": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "get": {
+        "description": "Get list employees",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "outletid",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Get list employees",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "description": "Success get list employees",
+                    "value": {
+                      "data": [
+                        {
+                          "id": 1,
+                          "name": "Fakhrul",
+                          "phone": "08123456789",
+                          "email": "fakhrul@gmail.com",
+                          "role": "Kasir"
+                        },
+                        {
+                          "id": 2,
+                          "name": "Fakhrul2",
+                          "phone": "08123456789",
+                          "email": "fakhrul2@gmail.com",
+                          "role": "Kasir"
+                        }
+                      ]
+                    }
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
-                          "id" : {
+                          "id": {
                             "type": "integer"
                           },
                           "name": {
@@ -166,134 +296,6 @@
                               "Pemilik",
                               "Superadmin"
                             ]
-                          },
-                          "outlets": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "integer"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "address": {
-                                  "type": "string"
-                                },
-                                "phone": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "is_active": {
-                                  "type": "boolean"
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "errors" : {
-                        "type": "object"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "get": {
-          "description": "Get list employees",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "name",
-              "in": "query",
-              "required": false,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "outletid",
-              "in": "query",
-              "required": false,
-              "schema": {
-                "type": "integer"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Get list employees",
-              "content": {
-                "application/json": {
-                  "examples": {
-                    "success" : {
-                      "description" : "Success get list employees",
-                      "value" : {
-                        "data": [
-                          {
-                            "id": 1,
-                            "name" : "Fakhrul", 
-                            "phone" : "08123456789", 
-                            "email" : "fakhrul@gmail.com",
-                            "role" : "Kasir"
-                          },
-                          {
-                            "id": 2,
-                            "name" : "Fakhrul2", 
-                            "phone" : "08123456789", 
-                            "email" : "fakhrul2@gmail.com",
-                            "role" : "Kasir"
-                          }
-                        ]
-                        
-                      }
-                    }
-                  },
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "data": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id" : {
-                              "type": "integer"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "phone": {
-                              "type": "string"
-                            },
-                            "pin": {
-                              "type": "string"
-                            },
-                            "email": {
-                              "type": "string"
-                            },
-                            "role": {
-                              "type": "string",
-                              "enum": [
-                                "Kasir",
-                                "Manajer",
-                                "Pemilik",
-                                "Superadmin"
-                              ]
-                            }
                           }
                         }
                       }
@@ -304,238 +306,166 @@
             }
           }
         }
-      },
-      "/api/employees/{id}": {
-        "get": {
-          "description": "Get employee",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
+      }
+    },
+    "/api/employees/{id}": {
+      "get": {
+        "description": "Get employee",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          ],
-          "responses": {
-            "200" : {
-              "description": "Success get employee",
-              "content": {
-                "application/json" : {
-                  "schema" : {
-                    "type": "object",
-                    "properties": {
-                      "data" : {
-                        "type": "object",
-                        "properties": {
-                          "id" : {
-                            "type": "integer"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "phone": {
-                            "type": "string"
-                          },
-                          "pin": {
-                            "type": "string"
-                          },
-                          "email": {
-                            "type": "string"
-                          },
-                          "role": {
-                            "type": "string",
-                            "enum": [
-                              "Kasir",
-                              "Manajer",
-                              "Pemilik",
-                              "Superadmin"
-                            ]
-                          },
-                          "outlets": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "integer"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "address": {
-                                  "type": "string"
-                                },
-                                "phone": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "is_active": {
-                                  "type": "boolean"
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "errors" : {
-                        "type": "object"
-                      }
-                    }
-                  }
-                }
-              }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
             }
           }
-        },
-        "put": {
-          "description": "Update employee",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
-            }
-          ],
-          "requestBody": {
-            "description": "Update existing employee",
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get employee",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "name",
-                    "phone",
-                    "pin",
-                    "role",
-                    "outletIds"
-                  ],
                   "properties": {
-                    "name": {
-                      "type": "string", 
-                      "maximum": 50
-                    },
-                    "phone": {
-                      "type": "string",
-                      "maximum": 20
-                    },
-                    "pin": {
-                      "type": "string",
-                      "maximum": 4,
-                      "minimum": 4
-                    },
-                    "email": {
-                      "type": "string",
-                      "maximum": 100
-                    },
-                    "role": {
-                      "type": "string",
-                      "enum": [
-                        "Kasir",
-                        "Manajer",
-                        "Pemilik",
-                        "Superadmin"
-                      ]
-                    },
-                    "outletIds": {
-                      "type":"array",
-                      "items": {
-                        "type": "integer"
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "pin": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "Kasir",
+                            "Manajer",
+                            "Pemilik",
+                            "Superadmin"
+                          ]
+                        },
+                        "outlets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "address": {
+                                "type": "string"
+                              },
+                              "phone": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_active": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
                       }
+                    },
+                    "errors": {
+                      "type": "object"
                     }
                   }
                 }
               }
             }
+          }
+        }
+      },
+      "put": {
+        "description": "Update employee",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
           },
-          "responses": {
-            "200" : {
-              "description": "Success update employee",
-              "content": {
-                "application/json" : {
-                  "schema" : {
-                    "type": "object",
-                    "properties": {
-                      "data" : {
-                        "type": "object",
-                        "properties": {
-                          "id" : {
-                            "type": "integer"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "phone": {
-                            "type": "string"
-                          },
-                          "pin": {
-                            "type": "string"
-                          },
-                          "email": {
-                            "type": "string"
-                          },
-                          "role": {
-                            "type": "string",
-                            "enum": [
-                              "Kasir",
-                              "Manajer",
-                              "Pemilik",
-                              "Superadmin"
-                            ]
-                          },
-                          "outlets": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id": {
-                                  "type": "integer"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "address": {
-                                  "type": "string"
-                                },
-                                "phone": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "is_active": {
-                                  "type": "boolean"
-                                }
-                              }
-                            }
-                          }
-                        }
-                      },
-                      "errors" : {
-                        "type": "object"
-                      }
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update existing employee",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "phone",
+                  "pin",
+                  "role",
+                  "outletIds"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "maximum": 50
+                  },
+                  "phone": {
+                    "type": "string",
+                    "maximum": 20
+                  },
+                  "pin": {
+                    "type": "string",
+                    "maximum": 4,
+                    "minimum": 4
+                  },
+                  "email": {
+                    "type": "string",
+                    "maximum": 100
+                  },
+                  "role": {
+                    "type": "string",
+                    "enum": [
+                      "Kasir",
+                      "Manajer",
+                      "Pemilik",
+                      "Superadmin"
+                    ]
+                  },
+                  "outletIds": {
+                    "type": "array",
+                    "items": {
+                      "type": "integer"
                     }
                   }
                 }
@@ -543,40 +473,112 @@
             }
           }
         },
-        "delete": {
-          "description": "Delete employee",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
+        "responses": {
+          "200": {
+            "description": "Success update employee",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "pin": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "Kasir",
+                            "Manajer",
+                            "Pemilik",
+                            "Superadmin"
+                          ]
+                        },
+                        "outlets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "address": {
+                                "type": "string"
+                              },
+                              "phone": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "is_active": {
+                                "type": "boolean"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "object"
+                    }
+                  }
+                }
               }
             }
-          ],
-          "responses": {
-            "200" : {
-              "description": "Success delete employee",
-              "content": {
-                "application/json" : {
-                  "schema" : {
-                    "type": "object",
-                    "properties": {
-                      "data" : {
-                        "type": "boolean"
-                      },
-                      "errors" : {
-                        "type": "object"
-                      }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete employee",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete employee",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    },
+                    "errors": {
+                      "type": "object"
                     }
                   }
                 }
@@ -587,3 +589,4 @@
       }
     }
   }
+}

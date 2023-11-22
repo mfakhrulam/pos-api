@@ -30,7 +30,9 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "name", "phone", "gender"
+                  "name",
+                  "phone",
+                  "gender"
                 ],
                 "properties": {
                   "name": {
@@ -159,7 +161,7 @@
             "schema": {
               "type": "string"
             }
-          }, 
+          },
           {
             "name": "id",
             "in": "path",
@@ -235,7 +237,9 @@
               "schema": {
                 "type": "object",
                 "required": [
-                  "name", "phone", "gender"
+                  "name",
+                  "phone",
+                  "gender"
                 ],
                 "properties": {
                   "name": {
@@ -319,17 +323,17 @@
           }
         ],
         "responses": {
-          "200" : {
+          "200": {
             "description": "Success delete a customer",
             "content": {
-              "application/json" : {
-                "schema" : {
+              "application/json": {
+                "schema": {
                   "type": "object",
                   "properties": {
-                    "data" : {
+                    "data": {
                       "type": "boolean"
                     },
-                    "errors" : {
+                    "errors": {
                       "type": "object"
                     }
                   }

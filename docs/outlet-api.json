@@ -1,156 +1,96 @@
 {
-    "openapi":"3.0.2",
-    "info": {
-      "title":"Outlets API",
-      "description" : "Outlets API",
-      "version":"1.0"
-    },
-    "servers": [
-      {
-        "url":"http://localhost:8000"
-      }
-    ],
-    "paths": {
-      "/api/outlets" : {
-        "post" : {
+  "openapi": "3.0.2",
+  "info": {
+    "title": "Outlets API",
+    "description": "Outlets API",
+    "version": "1.0"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8000"
+    }
+  ],
+  "paths": {
+    "/api/outlets": {
+      "post": {
+        "description": "Create new outlet",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
           "description": "Create new outlet",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
+          "content": {
+            "application./json": {
               "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "requestBody" : {
-            "description": "Create new outlet",
-            "content": {
-              "application./json": {
-                "schema" : {
-                  "type": "object",
-                  "required": [
-                    "name", 
-                    "address", 
-                    "phone", 
-                    "email", 
-                    "is_active"
-                  ],
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "phone": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "is_active": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "responses": {
-            "201" : {
-              "description": "Success create new outlet",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "data": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "integer"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "address": {
-                            "type": "string"
-                          },
-                          "phone": {
-                            "type": "string"
-                          },
-                          "email": {
-                            "type": "string"
-                          },
-                          "is_active": {
-                            "type": "boolean"
-                          }
-                        }
-                      },
-                      "errors": {
-                        "type": "object"
-                      }
-                    }
+                "type": "object",
+                "required": [
+                  "name",
+                  "address",
+                  "phone",
+                  "email",
+                  "is_active"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "is_active": {
+                    "type": "boolean"
                   }
                 }
               }
             }
           }
         },
-        "get": {
-          "description": "Get list outlet",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            }
-          ],
-          "responses": {
-            "200": {
-              "description": "Success get list outlet",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "data": {
-                        "type": "array",
-                        "items": {
-                          "type": "object",
-                          "properties": {
-                            "id": {
-                              "type": "integer"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "address": {
-                              "type": "string"
-                            },
-                            "phone": {
-                              "type": "string"
-                            },
-                            "email": {
-                              "type": "string"
-                            },
-                            "is_active": {
-                              "type": "boolean"
-                            }
-                          }
+        "responses": {
+          "201": {
+            "description": "Success create new outlet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "is_active": {
+                          "type": "boolean"
                         }
-                      },
-                      "errors": {
-                        "type": "object"
-                      },
-                      "meta": {
-                        "type": "object"
                       }
+                    },
+                    "errors": {
+                      "type": "object"
                     }
                   }
                 }
@@ -159,36 +99,29 @@
           }
         }
       },
-      "/api/outlets/{id}": {
-        "get" : {
-          "description": "Get outlet",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
+      "get": {
+        "description": "Get list outlet",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
-          ],
-          "responses": {
-            "200" : {
-              "description": "Success get outlet",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "data": {
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get list outlet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
                         "type": "object",
                         "properties": {
                           "id": {
@@ -208,180 +141,246 @@
                           },
                           "is_active": {
                             "type": "boolean"
-                          }, 
-                          "employees": {
-                            "type": "array",
-                            "items": {
-                              "type": "object",
-                              "properties": {
-                                "id" : {
-                                  "type": "integer"
-                                },
-                                "name": {
-                                  "type": "string"
-                                },
-                                "phone": {
-                                  "type": "string"
-                                },
-                                "pin": {
-                                  "type": "string"
-                                },
-                                "email": {
-                                  "type": "string"
-                                },
-                                "role": {
-                                  "type": "string",
-                                  "enum": [
-                                    "Kasir",
-                                    "Manajer",
-                                    "Pemilik",
-                                    "Superadmin"
-                                  ]
-                                }
+                          }
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "object"
+                    },
+                    "meta": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/outlets/{id}": {
+      "get": {
+        "description": "Get outlet",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get outlet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "is_active": {
+                          "type": "boolean"
+                        },
+                        "employees": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "integer"
+                              },
+                              "name": {
+                                "type": "string"
+                              },
+                              "phone": {
+                                "type": "string"
+                              },
+                              "pin": {
+                                "type": "string"
+                              },
+                              "email": {
+                                "type": "string"
+                              },
+                              "role": {
+                                "type": "string",
+                                "enum": [
+                                  "Kasir",
+                                  "Manajer",
+                                  "Pemilik",
+                                  "Superadmin"
+                                ]
                               }
                             }
                           }
                         }
-                      },
-                      "errors": {
-                        "type": "object"
                       }
+                    },
+                    "errors": {
+                      "type": "object"
                     }
                   }
                 }
               }
             }
           }
-        },
-        "put": {
-          "description": "Update outlet",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
-              }
-            }
-          ],
-          "requestBody" : {
-            "description": "Update outlet",
-            "content": {
-              "application./json": {
-                "schema" : {
-                  "type": "object",
-                  "required": [
-                    "name", 
-                    "address", 
-                    "phone", 
-                    "email", 
-                    "is_active"
-                  ],
-                  "properties": {
-                    "name": {
-                      "type": "string"
-                    },
-                    "address": {
-                      "type": "string"
-                    },
-                    "phone": {
-                      "type": "string"
-                    },
-                    "email": {
-                      "type": "string"
-                    },
-                    "is_active": {
-                      "type": "boolean"
-                    }
-                  }
-                }
-              }
+        }
+      },
+      "put": {
+        "description": "Update outlet",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
             }
           },
-          "responses": {
-            "200" : {
-              "description": "Success update outlet",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "data": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "integer"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "address": {
-                            "type": "string"
-                          },
-                          "phone": {
-                            "type": "string"
-                          },
-                          "email": {
-                            "type": "string"
-                          },
-                          "is_active": {
-                            "type": "boolean"
-                          }
-                        }
-                      },
-                      "errors": {
-                        "type": "object"
-                      }
-                    }
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Update outlet",
+          "content": {
+            "application./json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "name",
+                  "address",
+                  "phone",
+                  "email",
+                  "is_active"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "address": {
+                    "type": "string"
+                  },
+                  "phone": {
+                    "type": "string"
+                  },
+                  "email": {
+                    "type": "string"
+                  },
+                  "is_active": {
+                    "type": "boolean"
                   }
                 }
               }
             }
           }
         },
-        "delete": {
-          "description": "Delete outlet",
-          "parameters": [
-            {
-              "name": "Authorization",
-              "in": "header",
-              "required": true,
-              "schema": {
-                "type": "string"
-              }
-            },
-            {
-              "name": "id",
-              "in": "path",
-              "required": true,
-              "schema": {
-                "type": "integer"
+        "responses": {
+          "200": {
+            "description": "Success update outlet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "address": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "is_active": {
+                          "type": "boolean"
+                        }
+                      }
+                    },
+                    "errors": {
+                      "type": "object"
+                    }
+                  }
+                }
               }
             }
-          ],
-          "responses": {
-            "200": {
-              "description": "Success delete outlet",
-              "content": {
-                "application/json": {
-                  "schema": {
-                    "type": "object",
-                    "properties": {
-                      "data": {
-                        "type": "boolean"
-                      },
-                      "errors": {
-                        "type": "object"
-                      }
+          }
+        }
+      },
+      "delete": {
+        "description": "Delete outlet",
+        "parameters": [
+          {
+            "name": "Authorization",
+            "in": "header",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success delete outlet",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    },
+                    "errors": {
+                      "type": "object"
                     }
                   }
                 }
@@ -392,3 +391,4 @@
       }
     }
   }
+}
