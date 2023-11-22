@@ -96,7 +96,6 @@ class EmployeeController extends Controller
     {
         $user = Auth::user();
         $employees = Employee::query()->where('user_id', $user->id);
-        Log::info(json_encode($employees));
 
         $employees = $employees->where(function (Builder $builder) use ($request){
             $name = $request->input('name');
@@ -114,7 +113,6 @@ class EmployeeController extends Controller
 
 
         $employees = $employees->get();
-        // return new EmployeeCollectionResource($employees);
         return (EmployeeResource::collection($employees))->response()->setStatusCode(200);
 
     }
