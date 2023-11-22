@@ -28,6 +28,16 @@ class User extends Model implements Authenticatable
         return $this->hasMany(Outlet::class, 'user_id', 'id');
     }
 
+    public function employees(): HasMany
+    {
+        return $this->hasMany(Employee::class, 'user_id', 'id');
+    }
+
+    public function customers(): HasMany
+    {
+        return $this->hasMany(Customer::class, 'user_id', 'id');
+    }
+
     /**
      * Get the name of the unique identifier for the user.
      *

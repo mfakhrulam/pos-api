@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\OutletController;
 use App\Http\Controllers\UserController;
@@ -43,5 +44,10 @@ Route::middleware(ApiAuthMiddleware::class)->group(function() {
   Route::get('/employees/{id}', [EmployeeController::class, 'get'])->where('id', '[0-9]+');
   Route::put('/employees/{id}', [EmployeeController::class, 'update'])->where('id', '[0-9]+');
   Route::delete('/employees/{id}', [EmployeeController::class, 'delete'])->where('id', '[0-9]+');
-
+  
+  Route::post('/customers', [CustomerController::class, 'create']);
+  Route::get('/customers', [CustomerController::class, 'search']);
+  Route::get('/customers/{id}', [CustomerController::class, 'get'])->where('id', '[0-9]+');
+  Route::put('/customers/{id}', [CustomerController::class, 'update'])->where('id', '[0-9]+');
+  Route::delete('/customers/{id}', [CustomerController::class, 'delete'])->where('id', '[0-9]+');
 });
