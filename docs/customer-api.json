@@ -105,11 +105,19 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "name",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
           "200": {
-            "description": "Get list employees",
+            "description": "Get list customers",
             "content": {
               "application/json": {
                 "schema": {
@@ -231,7 +239,7 @@
           }
         ],
         "requestBody": {
-          "description": "Create a new customer",
+          "description": "Update a customer",
           "content": {
             "application/json": {
               "schema": {
