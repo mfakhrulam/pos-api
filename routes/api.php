@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\OutletController;
@@ -50,4 +51,10 @@ Route::middleware(ApiAuthMiddleware::class)->group(function() {
   Route::get('/customers/{id}', [CustomerController::class, 'get'])->where('id', '[0-9]+');
   Route::put('/customers/{id}', [CustomerController::class, 'update'])->where('id', '[0-9]+');
   Route::delete('/customers/{id}', [CustomerController::class, 'delete'])->where('id', '[0-9]+');
+  
+  Route::post('/categories', [CategoryController::class, 'create']);
+  Route::get('/categories', [CategoryController::class, 'search']);
+  Route::get('/categories/{id}', [CategoryController::class, 'get'])->where('id', '[0-9]+');
+  Route::put('/categories/{id}', [CategoryController::class, 'update'])->where('id', '[0-9]+');
+  Route::delete('/categories/{id}', [CategoryController::class, 'delete'])->where('id', '[0-9]+');
 });
