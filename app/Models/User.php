@@ -38,6 +38,16 @@ class User extends Model implements Authenticatable
         return $this->hasMany(Customer::class, 'user_id', 'id');
     }
 
+    public function categories(): HasMany
+    {
+        return $this->hasMany(Category::class, 'user_id', 'id');
+    }
+
+    public function products(): HasMany
+    {
+        return $this->hasMany(Product::class, 'user_id', 'id');
+    }
+
     /**
      * Get the name of the unique identifier for the user.
      *

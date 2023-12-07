@@ -1,8 +1,8 @@
 {
   "openapi": "3.0.2",
   "info": {
-    "title": "Customer API Reference",
-    "description": "Customer API",
+    "title": "Category API",
+    "description": "API for managing categories",
     "version": "1.0"
   },
   "servers": [
@@ -11,9 +11,10 @@
     }
   ],
   "paths": {
-    "/api/customers": {
+    "/api/categories": {
       "post": {
-        "description": "Create a new customer",
+        "summary": "Create a new category",
+        "description": "Create a new category",
         "parameters": [
           {
             "name": "Authorization",
@@ -25,41 +26,27 @@
           }
         ],
         "requestBody": {
-          "description": "Create a new customer",
+          "description": "Create a new category",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "name",
-                  "phone",
-                  "gender"
-                ],
                 "properties": {
                   "name": {
                     "type": "string"
-                  },
-                  "phone": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "gender": {
-                    "type": "string",
-                    "enum": [
-                      "Laki-laki",
-                      "Perempuan"
-                    ]
                   }
-                }
+                },
+                "required": [
+                  "name"
+                ]
               }
             }
           }
         },
         "responses": {
           "201": {
-            "description": "Success create a customer",
+            "description": "Category created successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -73,19 +60,6 @@
                         },
                         "name": {
                           "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "gender": {
-                          "type": "string",
-                          "enum": [
-                            "Laki-laki",
-                            "Perempuan"
-                          ]
                         }
                       }
                     }
@@ -97,7 +71,8 @@
         }
       },
       "get": {
-        "description": "Get list customers",
+        "description": "Get all or search categories",
+        "summary": "Get all or search categories",
         "parameters": [
           {
             "name": "Authorization",
@@ -118,7 +93,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Get list customers",
+            "description": "List of categories",
             "content": {
               "application/json": {
                 "schema": {
@@ -134,19 +109,6 @@
                           },
                           "name": {
                             "type": "string"
-                          },
-                          "phone": {
-                            "type": "string"
-                          },
-                          "email": {
-                            "type": "string"
-                          },
-                          "gender": {
-                            "type": "string",
-                            "enum": [
-                              "Laki-laki",
-                              "Perempuan"
-                            ]
                           }
                         }
                       }
@@ -159,9 +121,10 @@
         }
       }
     },
-    "/api/customers/{id}": {
+    "/api/categories/{categoryId}": {
       "get": {
-        "description": "Get a customer",
+        "description": "Get a category by ID",
+        "summary": "Get a category by ID",
         "parameters": [
           {
             "name": "Authorization",
@@ -172,21 +135,21 @@
             }
           },
           {
-            "name": "id",
+            "name": "categoryId",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
+              "type": "string"
+            },
+            "description": "ID of the category"
           }
         ],
         "responses": {
           "200": {
-            "description": "Success get a customer",
+            "description": "Category details",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
                   "properties": {
                     "data": {
                       "type": "object",
@@ -196,19 +159,6 @@
                         },
                         "name": {
                           "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "gender": {
-                          "type": "string",
-                          "enum": [
-                            "Laki-laki",
-                            "Perempuan"
-                          ]
                         }
                       }
                     }
@@ -220,7 +170,7 @@
         }
       },
       "put": {
-        "description": "Update a customer",
+        "summary": "Update a category by ID",
         "parameters": [
           {
             "name": "Authorization",
@@ -231,41 +181,28 @@
             }
           },
           {
-            "name": "id",
+            "name": "categoryId",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
+              "type": "string"
+            },
+            "description": "ID of the category"
           }
         ],
         "requestBody": {
-          "description": "Update a customer",
+          "description": "Update a category",
+          "required": true,
           "content": {
             "application/json": {
               "schema": {
                 "type": "object",
                 "required": [
-                  "name",
-                  "phone",
-                  "gender"
+                  "name"
                 ],
                 "properties": {
                   "name": {
                     "type": "string"
-                  },
-                  "phone": {
-                    "type": "string"
-                  },
-                  "email": {
-                    "type": "string"
-                  },
-                  "gender": {
-                    "type": "string",
-                    "enum": [
-                      "Laki-laki",
-                      "Perempuan"
-                    ]
                   }
                 }
               }
@@ -274,7 +211,7 @@
         },
         "responses": {
           "200": {
-            "description": "Success update a customer",
+            "description": "Category updated successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -288,19 +225,6 @@
                         },
                         "name": {
                           "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "gender": {
-                          "type": "string",
-                          "enum": [
-                            "Laki-laki",
-                            "Perempuan"
-                          ]
                         }
                       }
                     }
@@ -312,7 +236,7 @@
         }
       },
       "delete": {
-        "description": "Delete a customer",
+        "summary": "Delete a category by ID",
         "parameters": [
           {
             "name": "Authorization",
@@ -323,12 +247,13 @@
             }
           },
           {
-            "name": "id",
+            "name": "categoryId",
             "in": "path",
             "required": true,
             "schema": {
-              "type": "integer"
-            }
+              "type": "string"
+            },
+            "description": "ID of the category"
           }
         ],
         "responses": {
