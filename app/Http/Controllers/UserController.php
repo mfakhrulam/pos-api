@@ -86,7 +86,7 @@ class UserController extends Controller
         ]);
 
         // can't send email with free account
-        // $user->notify(new OtpNotification($user));
+        $user->notify(new OtpNotification($user));
         // \Mail::to($request->email)->send(new sendmail($mail_details));
         
         return response()->json([

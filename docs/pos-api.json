@@ -159,6 +159,237 @@
         }
       }
     },
+    "/api/users/send_otp": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Send OTP to verify user's email",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "amin": {
+                  "description": "Send OTP to user amin",
+                  "value": {
+                    "email": "amin@example.com"
+                  }
+                }
+              },
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Send OTP to verify user's email",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "description": "Success Send OTP",
+                    "value": {
+                      "data": {
+                        "otp": 8332,
+                        "token_expired_at": "2023-12-18T09:55:03.188823Z"
+                      }
+                    }
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "otp": {
+                          "type": "integer"
+                        },
+                        "token_expired_at": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "User not found",
+            "content": {
+              "application/json": {
+                "example": {
+                  "errors": {
+                    "message": [
+                      "User not found"
+                    ]
+                 }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The user has been verified",
+            "content": {
+              "application/json": {
+                "example": {
+                   "errors": {
+                      "message": [
+                        "The user has been verified, no OTP code required"
+                      ]
+                   }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/users/verify_otp": {
+      "post": {
+        "tags": [
+          "user"
+        ],
+        "description": "Verify OTP",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "examples": {
+                "amin": {
+                  "description": "Verify OTP",
+                  "value": {
+                    "email": "amin@example.com",
+                    "otp": 8332
+                  }
+                }
+              },
+              "schema": {
+                "type": "object",
+                "required": [
+                  "email",
+                  "otp"
+                ],
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "otp": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Verify OTP success",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "description": "Success Verify OTP",
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "name": "Fakhrul Amin",
+                        "email": "amin@example.com",
+                        "phone": "0856732893928"
+                      },
+                      "access_token": "1|sdashjdjahsdbnljbsjandklan",
+                      "token_type": "Bearer"
+                    }
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        }
+                      }
+                    },
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "The user has been verified or Validation error",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "Validation error": {
+                    "description": "Validation error",
+                    "value": {
+                      "errors": {
+                        "email": [
+                          "email must not be blank",
+                          "email must contain @"
+                        ]
+                      }
+                    }
+                  }, 
+                  "Verified User": {
+                    "description": "The user has been verified",
+                    "value": {
+                      "errors": {
+                        "message": [
+                          "The user has been verified, no OTP code required"
+                        ]
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "OTP wrong or expired",
+            "content": {
+              "application/json": {
+                "example": {
+                  "errors": {
+                    "message": [
+                      "OTP wrong or expired"
+                    ]
+                 }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/users/login": {
       "post": {
         "tags": [
@@ -208,10 +439,10 @@
                         "id": 1,
                         "name": "Fakhrul Amin",
                         "email": "amin@example.com",
-                        "phone": "0856732893928",
-                        "token": "12h1ni2xuhhor7ywqhdkshfk"
+                        "phone": "0856732893928"
                       },
-                      "errors": {}
+                      "access_token": "2|kdfsnfiuhsaonfsdkndfkjsoefe",
+                      "token_type": "Bearer"
                     }
                   }
                 },
@@ -232,16 +463,33 @@
                         },
                         "phone": {
                           "type": "string"
-                        },
-                        "token": {
-                          "type": "string"
                         }
                       }
                     },
-                    "errors": {
-                      "type": "object"
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string"
                     }
                   }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Validation error"
+          },
+          "401": {
+            "description": "Email not verified",
+            "content": {
+              "application/json": {
+                "example": {
+                  "errors": {
+                    "message": [
+                      "Email has not been verified"
+                    ]
+                 }
                 }
               }
             }
@@ -255,16 +503,6 @@
           "user"
         ],
         "description": "Get current user",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success get current user",
@@ -298,23 +536,18 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth":[]
+          }
+        ]
       },
       "patch": {
         "tags": [
           "user"
         ],
         "description": "Update current user",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "description": "Update current user",
           "content": {
@@ -372,7 +605,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth":[]
+          }
+        ]
       }
     },
     "/api/users/logout": {
@@ -381,16 +619,6 @@
           "user"
         ],
         "description": "Logout current user",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "responses": {
           "200": {
             "description": "Success logout current user",
@@ -410,7 +638,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "BearerAuth":[]
+          }
+        ]
       }
     },
     "/api/outlets": {
@@ -2530,6 +2763,12 @@
             "type": "boolean"
           }
         }
+      }
+    },
+    "securitySchemes": {
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer"
       }
     }
   }
