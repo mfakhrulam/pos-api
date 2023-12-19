@@ -27,10 +27,13 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::post('/users', [UserController::class, 'register']);
+Route::post('/users/send_otp', [UserController::class, 'sendOtp']);
+Route::post('/users/verify_otp', [UserController::class, 'verifyOtp']);
 
 Route::post('/users/login', [UserController::class, 'login']);  
 
 Route::middleware(ApiAuthMiddleware::class)->group(function() {
+// Route::middleware('auth:sanctum')->group(function() {
   Route::get('/users/current', [UserController::class, 'get']);
   Route::patch('/users/current', [UserController::class, 'update']);
   Route::delete('/users/logout', [UserController::class, 'logout']);

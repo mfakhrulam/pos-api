@@ -6,6 +6,9 @@ use App\Models\User;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class UserTest extends TestCase
@@ -17,14 +20,14 @@ class UserTest extends TestCase
     {
         $this->post('/api/users/', [
             'name' => 'Fakhrul',
-            'phone' => '08888888888',
+            'phone' => '081234567898',
             'email' => 'fakhrul@mail.com',
             'password' => '12345678'
         ])->assertStatus(201)
         ->assertJson([
             'data' => [
                 'name' => 'Fakhrul',
-                'phone' => '08888888888',
+                'phone' => '081234567898',
                 'email' => 'fakhrul@mail.com',
             ]
         ]);
@@ -61,7 +64,7 @@ class UserTest extends TestCase
         $this->testRegisterSuccess();
         $this->post('/api/users/', [
             'name' => 'Fakhrul',
-            'phone' => '08888888888',
+            'phone' => '081234567898',
             'email' => 'fakhrul@mail.com',
             'password' => '12345678'
         ])->assertStatus(400)
@@ -77,42 +80,134 @@ class UserTest extends TestCase
         ]);
     }
 
-    public function testLoginSuccessWithPhone(): void
+    public function testSendOTPSuccess()
     {
-        $this->seed([UserSeeder::class]);
-        $this->post('/api/users/login', [
-            'email_or_phone' => '0888888888',
-            'password' => '12345678'
-        ])->assertStatus(200)
-        ->assertJson([
+        $this->testRegisterSuccess();
+        $response = $this->post('/api/users/send_otp', [
+            'email' => 'fakhrul@mail.com'
+        ])->assertStatus(200)->assertJsonStructure([
             'data' => [
-                'name' => 'test',
-                'phone' => '0888888888',
-                'email' => 'test@mail.com',
+                'otp',
+                'token_expired_at'
             ]
         ]);
-
-        $user = User::where('email', 'test@mail.com')->first();
-        self::assertNotNull($user->token);
+        
+        return $response->json();
+        // $user = User::factory()->make();
+        // $response = $this->actingAs($user, 'api')
+        // ->json('post', '/api/users/sendOtp', [
+        //     'email' => 'user@gmail.com'
+        // ]);
     }
 
-    public function testLoginSuccessWithEmail(): void
+    public function testSendOTPUserAlreadyVerifyEmail(): void
     {
-        $this->seed([UserSeeder::class]);
+        $user = User::factory()->create();
+        $response = $this->post('/api/users/send_otp', [
+            'email' => $user['email']
+        ])->assertStatus(400)->assertJson([
+            'errors' => [
+                'message' => [
+                    'The user has been verified, no OTP code required'
+                ]
+            ]
+        ]);
+        
+    //     $response = $this->actingAs($user)
+    //     ->json('post', '/api/users/send_otp', [
+    //         'email' => 'user@gmail.com'
+    //     ]);
+
+    //     Log::info(json_decode($user, JSON_PRETTY_PRINT));
+    }
+
+    public function testVerifyOTPSuccess(): void
+    {
+        $OTPresource= $this->testSendOTPSuccess();
+        $otp= $OTPresource['data']['otp'];
+        $response = $this->post('/api/users/verify_otp', [
+            'email' => 'fakhrul@mail.com', 
+            'otp' => $otp
+        ])->assertStatus(200)->assertJsonStructure([
+            'data' => [
+                'name',
+                'phone',
+                'email',
+            ],
+            'access_token',
+            'token_type'
+        ])->json();
+    }
+
+    public function testLoginSuccessWithPhone(): void
+    {
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
         $this->post('/api/users/login', [
-            'email_or_phone' => 'test@mail.com',
-            'password' => '12345678'
+            'email_or_phone' => $user->phone,
+            'password' => 'password123'
         ])->assertStatus(200)
         ->assertJson([
             'data' => [
                 'name' => 'test',
-                'phone' => '0888888888',
+                'phone' => '08123456789',
                 'email' => 'test@mail.com',
-            ]
+            ], 
+            'token_type' => 'Bearer',
+        ]);
+    }
+
+    public function testLoginSuccessWithEmail()
+    {
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
         ]);
 
-        $user = User::where('email', 'test@mail.com')->first();
-        self::assertNotNull($user->token);
+        $response = $this->post('/api/users/login', [
+            'email_or_phone' => $user->email,
+            'password' => 'password123'
+        ])->assertStatus(200)
+        ->assertJson([
+            'data' => [
+                'name' => 'test',
+                'phone' => '08123456789',
+                'email' => 'test@mail.com',
+            ], 
+            'token_type' => 'Bearer',
+        ]);
+        Log::info(json_encode($response->json(), JSON_PRETTY_PRINT));
+
+        return $response->json();
+    }
+
+    public function testLoginFailedEmailNotVerified()
+    {
+        $user = User::factory()->unverified()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $response = $this->post('/api/users/login', [
+            'email_or_phone' => $user->email,
+            'password' => 'password123'
+        ])->assertStatus(401)
+        ->assertJson([
+            'errors' => [
+                'message' => [
+                    'Email has not been verified'
+                ]
+            ]
+        ]);
     }
     
     public function testLoginFailedPhoneOrEmailNotFound(): void
@@ -149,15 +244,15 @@ class UserTest extends TestCase
 
     public function testGetSuccess(): void
     {
-        $this->seed([UserSeeder::class]);
+        $user = $this->testLoginSuccessWithEmail();
 
         $this->get('api/users/current', [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(200)
         ->assertJson([
             'data' => [
                 'name' => 'test',
-                'phone' => '0888888888',
+                'phone' => '08123456789',
                 'email' => 'test@mail.com',
             ]
         ]);
@@ -165,8 +260,6 @@ class UserTest extends TestCase
 
     public function testGetUnauthorized(): void
     {
-        $this->seed([UserSeeder::class]);
-
         $this->get('api/users/current')
         ->assertStatus(401)
         ->assertJson([
@@ -180,10 +273,10 @@ class UserTest extends TestCase
     
     public function testGetInvalidToken(): void
     {
-        $this->seed([UserSeeder::class]);
+        $user = $this->testLoginSuccessWithEmail();
 
         $this->get('api/users/current', [
-            'Authorization' => 'invalid_token'
+            'Authorization' => 'Bearer ' . 'token salah'
         ])->assertStatus(401)
         ->assertJson([
             'errors' => [
@@ -196,74 +289,74 @@ class UserTest extends TestCase
 
     public function testUpdatePasswordSuccess(): void
     {
-        $this->seed([UserSeeder::class]);
-        $oldUser = User::where('email', 'test@mail.com')->first();
+        $user = $this->testLoginSuccessWithEmail();
+        $oldUser = User::where('email', $user['data']['email'])->first();
 
         $this->patch('api/users/current', 
             [
                 'password' => 'password_changed'
             ],
             [
-                'Authorization' => 'test'
+                'Authorization' => 'Bearer ' . $user['access_token']
             ]
         )->assertStatus(200)
         ->assertJson([
             'data' => [
                 'name' => 'test',
-                'phone' => '0888888888',
+                'phone' => '08123456789',
                 'email' => 'test@mail.com',
             ]
         ]);
-        $newUser = User::where('email', 'test@mail.com')->first();
+        $newUser = User::where('email', $user['data']['email'])->first();
         self::assertNotEquals($oldUser->password, $newUser->password);
     }
 
     public function testUpdateNameSuccess(): void
     {
-        $this->seed([UserSeeder::class]);
-        $oldUser = User::where('email', 'test@mail.com')->first();
+        $user = $this->testLoginSuccessWithEmail();
+        $oldUser = User::where('email', $user['data']['email'])->first();
 
         $this->patch('api/users/current', 
             [
                 'name' => 'amin'
             ],
             [
-                'Authorization' => 'test'
+                'Authorization' => 'Bearer ' . $user['access_token']
             ]
         )->assertStatus(200)
         ->assertJson([
             'data' => [
                 'name' => 'amin',
-                'phone' => '0888888888',
+                'phone' => '08123456789',
                 'email' => 'test@mail.com',
             ]
         ]);
-        $newUser = User::where('email', 'test@mail.com')->first();
+        $newUser = User::where('email', $user['data']['email'])->first();
         self::assertNotEquals($oldUser->name, $newUser->name);
         
     }
 
     public function testUpdatePhoneSuccess(): void
     {
-        $this->seed([UserSeeder::class]);
-        $oldUser = User::where('email', 'test@mail.com')->first();
+        $user = $this->testLoginSuccessWithEmail();
+        $oldUser = User::where('email', $user['data']['email'])->first();
 
         $this->patch('api/users/current', 
             [
-                'phone' => '08987654321'
+                'phone' => '088888888881'
             ],
             [
-                'Authorization' => 'test'
+                'Authorization' => 'Bearer ' . $user['access_token']
             ]
         )->assertStatus(200)
         ->assertJson([
             'data' => [
                 'name' => 'test',
-                'phone' => '08987654321',
+                'phone' => '088888888881',
                 'email' => 'test@mail.com',
             ]
         ]);
-        $newUser = User::where('email', 'test@mail.com')->first();
+        $newUser = User::where('email', $user['data']['email'])->first();
         self::assertNotEquals($oldUser->phone, $newUser->phone);
         
     }
@@ -271,13 +364,14 @@ class UserTest extends TestCase
     public function testUpdatePhoneFailed(): void
     {
         $this->seed([UserSeeder::class]);
+        $user = $this->testLoginSuccessWithEmail();
 
         $this->patch('api/users/current', 
             [
-                'phone' => '08123456789'
+                'phone' => '0888888888'
             ],
             [
-                'Authorization' => 'test'
+                'Authorization' => 'Bearer ' . $user['access_token']
             ]
         )->assertStatus(400)
         ->assertJson([
@@ -291,14 +385,14 @@ class UserTest extends TestCase
 
     public function testUpdateFailed(): void
     {
-        $this->seed([UserSeeder::class]);
+        $user = $this->testLoginSuccessWithEmail();
 
         $this->patch('api/users/current', 
             [
                 'name' => 'AminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAminAmin'
             ],
             [
-                'Authorization' => 'test'
+                'Authorization' => 'Bearer ' . $user['access_token']
             ]
         )->assertStatus(400)
         ->assertJson([
@@ -312,18 +406,15 @@ class UserTest extends TestCase
 
     public function testLogoutSuccess(): void
     {
-        $this->seed([UserSeeder::class]);
+        $user = $this->testLoginSuccessWithEmail();
+
         $this->delete('api/users/logout', headers:[
-                'Authorization' => 'test'
+                'Authorization' => 'Bearer ' . $user['access_token']
             ]
         )->assertStatus(200)
         ->assertJson([
             'data' => true
         ]);
-
-        $user = User::where('email', 'test@mail.com')->first();
-        self::assertNull($user->token);
-
     }
     
     public function testLogoutFailed(): void
