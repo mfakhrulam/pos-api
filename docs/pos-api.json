@@ -6,7 +6,7 @@
   },
   "servers": [
     {
-      "url": "https://api.server.test/v1"
+      "url": "https://intemperate-vol.000webhostapp.com/"
     }
   ],
   "tags": [
@@ -653,14 +653,7 @@
         ],
         "description": "Create new outlet",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          
         ],
         "requestBody": {
           "description": "Create new outlet",
@@ -735,7 +728,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "get": {
         "tags": [
@@ -743,14 +741,7 @@
         ],
         "description": "Get list outlet",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          
         ],
         "responses": {
           "200": {
@@ -797,7 +788,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/outlets/{id}": {
@@ -807,14 +803,6 @@
         ],
         "description": "Get outlet",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -895,7 +883,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -903,14 +896,6 @@
         ],
         "description": "Update outlet",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -993,7 +978,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -1001,14 +991,6 @@
         ],
         "description": "Delete outlet",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -1037,7 +1019,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/employees": {
@@ -1047,14 +1034,7 @@
         ],
         "description": "Create new employee",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
+          
         ],
         "requestBody": {
           "description": "Create new employee",
@@ -1239,7 +1219,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "get": {
         "tags": [
@@ -1247,14 +1232,6 @@
         ],
         "description": "Get list employees",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "name",
             "in": "query",
@@ -1340,7 +1317,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/employees/{id}": {
@@ -1350,14 +1332,6 @@
         ],
         "description": "Get employee",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -1438,7 +1412,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -1446,14 +1425,6 @@
         ],
         "description": "Update employee",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -1585,7 +1556,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -1593,14 +1569,6 @@
         ],
         "description": "Delete employee",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -1629,7 +1597,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/customers": {
@@ -1638,16 +1611,6 @@
           "customer"
         ],
         "description": "Create a new customer",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "description": "Create a new customer",
           "content": {
@@ -1718,7 +1681,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "get": {
         "tags": [
@@ -1726,14 +1694,6 @@
         ],
         "description": "Get list customers",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "name",
             "in": "query",
@@ -1783,7 +1743,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/customers/{id}": {
@@ -1793,14 +1758,6 @@
         ],
         "description": "Get a customer",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -1847,7 +1804,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -1855,14 +1817,6 @@
         ],
         "description": "Update a customer",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -1942,7 +1896,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -1950,14 +1909,6 @@
         ],
         "description": "Delete a customer",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "id",
             "in": "path",
@@ -1986,7 +1937,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/categories": {
@@ -1996,16 +1952,6 @@
         ],
         "summary": "Create a new category",
         "description": "Create a new category",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "description": "Create a new category",
           "required": true,
@@ -2049,7 +1995,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "get": {
         "tags": [
@@ -2058,14 +2009,6 @@
         "description": "Get all or search categories",
         "summary": "Get all or search categories",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "name",
             "in": "query",
@@ -2102,7 +2045,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/categories/{categoryId}": {
@@ -2113,14 +2061,6 @@
         "description": "Get a category by ID",
         "summary": "Get a category by ID",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "categoryId",
             "in": "path",
@@ -2154,7 +2094,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -2162,14 +2107,6 @@
         ],
         "summary": "Update a category by ID",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "categoryId",
             "in": "path",
@@ -2223,7 +2160,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -2231,14 +2173,6 @@
         ],
         "summary": "Delete a category by ID",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "categoryId",
             "in": "path",
@@ -2268,7 +2202,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/products": {
@@ -2278,16 +2217,6 @@
         ],
         "description": "Create a new product",
         "summary": "Create a new product",
-        "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
         "requestBody": {
           "required": true,
           "content": {
@@ -2370,7 +2299,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "get": {
         "tags": [
@@ -2379,14 +2313,6 @@
         "description": "Get all, search, or filter products",
         "summary": "Get all, search, or filter products",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "name",
             "in": "query",
@@ -2466,7 +2392,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/products/{productId}": {
@@ -2477,14 +2408,6 @@
         "description": "Get a product by ID",
         "summary": "Get a product by ID",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "productId",
             "in": "path",
@@ -2535,7 +2458,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "put": {
         "tags": [
@@ -2544,14 +2472,6 @@
         "description": "Update a product by ID",
         "summary": "Update a product by ID",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "productId",
             "in": "path",
@@ -2639,7 +2559,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       },
       "delete": {
         "tags": [
@@ -2647,14 +2572,6 @@
         ],
         "summary": "Delete a product by ID",
         "parameters": [
-          {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
           {
             "name": "productId",
             "in": "path",
@@ -2684,7 +2601,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     },
     "/api/products/{productId}/delete_image": {
@@ -2695,14 +2617,6 @@
         "summary": "Delete image associated with a product by ID",
         "parameters": [
           {
-            "name": "Authorization",
-            "in": "header",
-            "required": true,
-            "schema": {
-              "type": "string"
-            }
-          },
-          {
             "name": "productId",
             "in": "path",
             "required": true,
@@ -2731,7 +2645,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "Authorization": []
+          }
+        ]
       }
     }
   },
