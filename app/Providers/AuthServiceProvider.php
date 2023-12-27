@@ -2,8 +2,11 @@
 
 namespace App\Providers;
 
+use App\Models\Employee;
+use Illuminate\Support\Facades\Auth;
 // use Illuminate\Support\Facades\Gate;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Http\Request;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,8 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        Auth::viaRequest('employee-token', function (Request $request) {
+            return Employee::where('token', (string) $request->header('x-auth-employee-token'))->first();
+        });
     }
 }

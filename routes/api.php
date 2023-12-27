@@ -7,6 +7,7 @@ use App\Http\Controllers\OutletController;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\ApiAuthMiddleware;
+use App\Http\Middleware\EmployeeAuthMiddleware;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -37,35 +38,39 @@ Route::middleware(ApiAuthMiddleware::class)->group(function() {
   Route::get('/users/current', [UserController::class, 'get']);
   Route::patch('/users/current', [UserController::class, 'update']);
   Route::delete('/users/logout', [UserController::class, 'logout']);
-
-  Route::post('/outlets', [OutletController::class, 'create']);
+  
+  Route::post('/employees/login', [EmployeeController::class, 'login']);
+  Route::delete('/employees/logout', [EmployeeController::class, 'logout']);
+  Route::post('/employees/register_owner', [EmployeeController::class, 'registerOwner']);
+  
+  Route::post('/outlets', [OutletController::class, 'create'])->middleware('role:Pemilik');
   Route::get('/outlets', [OutletController::class, 'getAll']);
   Route::get('/outlets/{id}', [OutletController::class, 'get'])->where('id', '[0-9]+');
-  Route::put('/outlets/{id}', [OutletController::class, 'update'])->where('id', '[0-9]+');
-  Route::delete('/outlets/{id}', [OutletController::class, 'delete'])->where('id', '[0-9]+');
+  Route::put('/outlets/{id}', [OutletController::class, 'update'])->where('id', '[0-9]+')->middleware('role:Pemilik');
+  Route::delete('/outlets/{id}', [OutletController::class, 'delete'])->where('id', '[0-9]+')->middleware('role:Pemilik');
   
-  Route::post('/employees', [EmployeeController::class, 'create']);
+  Route::post('/employees', [EmployeeController::class, 'create'])->middleware('role:Pemilik');
   Route::get('/employees', [EmployeeController::class, 'search']);
   Route::get('/employees/{id}', [EmployeeController::class, 'get'])->where('id', '[0-9]+');
-  Route::put('/employees/{id}', [EmployeeController::class, 'update'])->where('id', '[0-9]+');
-  Route::delete('/employees/{id}', [EmployeeController::class, 'delete'])->where('id', '[0-9]+');
+  Route::put('/employees/{id}', [EmployeeController::class, 'update'])->where('id', '[0-9]+')->middleware('role:Pemilik,Manajer');
+  Route::delete('/employees/{id}', [EmployeeController::class, 'delete'])->where('id', '[0-9]+')->middleware('role:Pemilik');
   
-  Route::post('/customers', [CustomerController::class, 'create']);
+  Route::post('/customers', [CustomerController::class, 'create'])->middleware('role:Pemilik');
   Route::get('/customers', [CustomerController::class, 'search']);
   Route::get('/customers/{id}', [CustomerController::class, 'get'])->where('id', '[0-9]+');
-  Route::put('/customers/{id}', [CustomerController::class, 'update'])->where('id', '[0-9]+');
-  Route::delete('/customers/{id}', [CustomerController::class, 'delete'])->where('id', '[0-9]+');
+  Route::put('/customers/{id}', [CustomerController::class, 'update'])->where('id', '[0-9]+')->middleware('role:Pemilik');
+  Route::delete('/customers/{id}', [CustomerController::class, 'delete'])->where('id', '[0-9]+')->middleware('role:Pemilik');
   
-  Route::post('/categories', [CategoryController::class, 'create']);
+  Route::post('/categories', [CategoryController::class, 'create'])->middleware('role:Pemilik,Manajer');
   Route::get('/categories', [CategoryController::class, 'search']);
   Route::get('/categories/{id}', [CategoryController::class, 'get'])->where('id', '[0-9]+');
-  Route::put('/categories/{id}', [CategoryController::class, 'update'])->where('id', '[0-9]+');
-  Route::delete('/categories/{id}', [CategoryController::class, 'delete'])->where('id', '[0-9]+');
+  Route::put('/categories/{id}', [CategoryController::class, 'update'])->where('id', '[0-9]+')->middleware('role:Pemilik,Manajer');
+  Route::delete('/categories/{id}', [CategoryController::class, 'delete'])->where('id', '[0-9]+')->middleware('role:Pemilik');
   
-  Route::post('/products', [ProductController::class, 'create']);
+  Route::post('/products', [ProductController::class, 'create'])->middleware('role:Pemilik,Manajer');
   Route::get('/products', [ProductController::class, 'search']);
   Route::get('/products/{id}', [ProductController::class, 'get'])->where('id', '[0-9]+');
-  Route::put('/products/{id}', [ProductController::class, 'update'])->where('id', '[0-9]+');
-  Route::delete('/products/{id}', [ProductController::class, 'delete'])->where('id', '[0-9]+');
-  Route::delete('/products/{id}/delete_image', [ProductController::class, 'deleteImage'])->where('id', '[0-9]+');
+  Route::put('/products/{id}', [ProductController::class, 'update'])->where('id', '[0-9]+')->middleware('role:Pemilik,Manajer');
+  Route::delete('/products/{id}', [ProductController::class, 'delete'])->where('id', '[0-9]+')->middleware('role:Pemilik');
+  Route::delete('/products/{id}/delete_image', [ProductController::class, 'deleteImage'])->where('id', '[0-9]+')->middleware('role:Pemilik');
 });
