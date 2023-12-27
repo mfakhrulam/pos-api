@@ -4,12 +4,14 @@ namespace Tests\Feature;
 
 use App\Models\Employee;
 use App\Models\Outlet;
+use App\Models\User;
 use Database\Seeders\EmployeeListSeeder;
 use Database\Seeders\OutletListSeeder;
 use Database\Seeders\OutletSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -18,8 +20,22 @@ class OutletTest extends TestCase
     /**
      * A basic feature test example.
      */
+
+    // private $user = User::factory()->create([
+    //     'name' => 'test',
+    //     'email' => "test@mail.com",
+    //     'phone' => "08123456789",
+    //     'password' => Hash::make('password123'),
+    // ]);
+
     public function testCreateSuccess(): void
     {
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
         $this->seed([UserSeeder::class]);
         $this->post('/api/outlets', [
             'name' => 'test restoran',
@@ -28,7 +44,7 @@ class OutletTest extends TestCase
             'email' => 'restoran@gmail.com',
             'is_active' => true
         ], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(201)
         ->assertJson([
             'data' => [
@@ -52,7 +68,7 @@ class OutletTest extends TestCase
             'email' => 'restoran.com',
             'is_active' => true
         ], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(400)
         ->assertJson([
             'errors' => [
@@ -91,7 +107,7 @@ class OutletTest extends TestCase
         $outlet = Outlet::query()->limit(1)->first();
 
         $this->get('api/outlets/'.$outlet->id, [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(200)
         ->assertJson([
             'data' => [
@@ -117,7 +133,7 @@ class OutletTest extends TestCase
         $outlet->employees()->sync($employees_id);
 
         $response = $this->get('api/outlets/'.$outlet->id, [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(200)
         ->assertJson([
             'data' => [
@@ -140,7 +156,7 @@ class OutletTest extends TestCase
         $outlet = Outlet::query()->limit(1)->first();
 
         $this->get('api/outlets/'.($outlet->id + 1), [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(404)
         ->assertJson([
             'errors' => [
@@ -180,7 +196,7 @@ class OutletTest extends TestCase
             'email' => 'restoran2@gmail.com',
             'is_active' => true
         ], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(200)
         ->assertJson([
             'data' => [
@@ -205,7 +221,7 @@ class OutletTest extends TestCase
             'email' => 'restoran2gmail.com',
             'is_active' => 'true'
         ], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(400)
         ->assertJson([
             'errors' => [
@@ -228,7 +244,7 @@ class OutletTest extends TestCase
         $outlet = Outlet::query()->limit(1)->first();
 
         $this->delete('api/outlets/'.$outlet->id, [], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(200)
         ->assertJson([
             'data' => true
@@ -241,7 +257,7 @@ class OutletTest extends TestCase
         $outlet = Outlet::query()->limit(1)->first();
 
         $this->delete('api/outlets/'.($outlet->id+1), [], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(404)
         ->assertJson([
             'errors' => [
@@ -257,7 +273,7 @@ class OutletTest extends TestCase
         $this->seed([UserSeeder::class, OutletListSeeder::class]);
 
         $response = $this->get('api/outlets', [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $user['access_token']
         ])->assertStatus(200)->json();
         // Log::info($response);
 

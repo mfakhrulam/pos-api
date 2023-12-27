@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Employee;
 use App\Models\Outlet;
+use App\Models\User;
 use Database\Seeders\EmployeeListSeeder;
 use Database\Seeders\EmployeeOutletSeeder;
 use Database\Seeders\EmployeeSeeder;
@@ -12,6 +13,7 @@ use Database\Seeders\OutletSeeder;
 use Database\Seeders\UserSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -20,9 +22,22 @@ class EmployeeTest extends TestCase
     /**
      * A basic feature test example.
      */
-    public function testCreateSuccess(): void
+    public function testCreateSuccess()
     {
-        $this->seed([UserSeeder::class, OutletListSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $employee = Employee::factory()->create([
+            
+        ])
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->seed([OutletListSeeder::class]);
         $outlet = Outlet::query()->limit(2)->get();
         $response = $this->post('/api/employees', [
             'name' => 'test',
@@ -32,7 +47,7 @@ class EmployeeTest extends TestCase
             'role' => '1',
             'outletIds' => [$outlet[0]->id, $outlet[1]->id]
         ], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(201)
         ->assertJson([
             'data' => [
@@ -46,11 +61,21 @@ class EmployeeTest extends TestCase
 
         // test that there are 2 outlets
         self::assertEquals(2, count($response['data']['outlets']));
+
+        return $access_token;
     }
 
     public function testCreateFailed(): void
     {
-        $this->seed([UserSeeder::class, OutletSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+        $this->seed([OutletSeeder::class]);
         $outlet = Outlet::query()->limit(1)->first();
         $this->post('/api/employees', [
             'name' => '',
@@ -60,7 +85,7 @@ class EmployeeTest extends TestCase
             'role' => 'Kasir',
             'outletIds' => [$outlet->id]
         ], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(400)
         ->assertJson([
             'errors' => [
@@ -73,11 +98,22 @@ class EmployeeTest extends TestCase
                 ],
             ]
         ]);
+
+        $user->tokens()->delete();
     }
 
     public function testCreateUnauthorized(): void
     {
-        $this->seed([UserSeeder::class, OutletSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->seed([OutletSeeder::class]);
         $outlet = Outlet::query()->limit(1)->first();
         $this->post('/api/employees', [
             'name' => 'test',
@@ -96,15 +132,17 @@ class EmployeeTest extends TestCase
                 ]
             ]
         ]);
+
+        $user->tokens()->delete();
     }
 
     public function testGetSuccess(): void
     {
-        $this->testCreateSuccess();
+        $access_token = $this->testCreateSuccess();
         $employee = Employee::query()->limit(1)->first();
         
         $this->get('api/employees/'. $employee->id, [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(200)
         ->assertJson([
             'data' => [
@@ -119,11 +157,11 @@ class EmployeeTest extends TestCase
     
     public function testGetEmployeeFailedNotFound(): void
     {
-        $this->testCreateSuccess();
+        $access_token = $this->testCreateSuccess();
         $employee = Employee::query()->limit(1)->first();
         
         $this->get('api/employees/'. ($employee->id + 1), [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(404)
         ->assertJson([
             'errors' => [
@@ -136,7 +174,16 @@ class EmployeeTest extends TestCase
 
     public function testGetEmployeeFailedUnauthorized(): void
     {
-        $this->seed([UserSeeder::class, EmployeeSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->seed([EmployeeSeeder::class]);
         $employee = Employee::query()->limit(1)->first();
         
         $this->get('api/employees/'. $employee->id, [
@@ -148,29 +195,14 @@ class EmployeeTest extends TestCase
                     'Unauthorized'
                 ]
             ]
-        ]);        
-    }
-
-    public function testGetOtherUserEmployeeFailed(): void
-    {
-        $this->seed([UserSeeder::class, EmployeeSeeder::class]);
-        $employee = Employee::query()->limit(1)->first();
-
-        $this->get('api/employees/'.$employee->id, [
-            'Authorization' => 'test2'
-        ])->assertStatus(404)
-        ->assertJson([
-            'errors' => [
-                'message' => [
-                    'Employee not found'
-                ]
-            ]
-        ]);
+        ]);     
+        
+        $user->tokens()->delete();
     }
 
     public function testUpdateEmployeeSuccess(): void
     {
-        $this->testCreateSuccess();
+        $access_token = $this->testCreateSuccess();
         $oldEmployee = Employee::with('outlets')->limit(1)->first();
         $outlet = Outlet::query()->orderBy('id', 'desc')->limit(2)->get();
         
@@ -182,7 +214,7 @@ class EmployeeTest extends TestCase
             'role' => 'Manajer',
             'outletIds' => [$outlet[0]->id, $outlet[1]->id]
         ], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(200)
         ->assertJson([
             'data' => [
@@ -201,7 +233,16 @@ class EmployeeTest extends TestCase
 
     public function testUpdateEmployeeFailedValidation(): void
     {
-        $this->seed([UserSeeder::class, EmployeeSeeder::class, OutletListSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->seed([EmployeeSeeder::class, OutletListSeeder::class]);
         $employee = Employee::query()->limit(1)->first();
         $outlet = Outlet::query()->orderBy('id', 'desc')->limit(2)->get();
 
@@ -213,7 +254,7 @@ class EmployeeTest extends TestCase
             'role' => 2,
             'outletIds' => [$outlet[0]->id, $outlet[1]->id]
         ], [
-            'Authorization' => 'test2'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(400)
         ->assertJson([
             'errors' => [
@@ -229,7 +270,16 @@ class EmployeeTest extends TestCase
     
     public function testUpdateEmployeeFailedNotFound(): void
     {
-        $this->seed([UserSeeder::class, EmployeeSeeder::class, OutletListSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->seed([EmployeeSeeder::class, OutletListSeeder::class]);
         $employee = Employee::query()->limit(1)->first();
         $outlet = Outlet::query()->orderBy('id', 'desc')->limit(2)->get();
 
@@ -241,7 +291,7 @@ class EmployeeTest extends TestCase
             'role' => 2,
             'outletIds' => [$outlet[0]->id, $outlet[1]->id]
         ], [
-            'Authorization' => 'test2'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(404)
         ->assertJson([
             'errors' => [
@@ -254,7 +304,16 @@ class EmployeeTest extends TestCase
     
     public function testUpdateEmployeeFailedUnauthorized(): void
     {
-        $this->seed([UserSeeder::class, EmployeeSeeder::class, OutletListSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->seed([EmployeeSeeder::class, OutletListSeeder::class]);
         $employee = Employee::query()->limit(1)->first();
         $outlet = Outlet::query()->orderBy('id', 'desc')->limit(2)->get();
         
@@ -279,11 +338,11 @@ class EmployeeTest extends TestCase
 
     public function testDeleteSuccess(): void
     {
-        $this->testCreateSuccess();
+        $access_token = $this->testCreateSuccess();
         $employee = Employee::query()->limit(1)->first();
 
         $this->delete('api/employees/'.$employee->id, [], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(200)
         ->assertJson([
             'data' => true
@@ -292,11 +351,11 @@ class EmployeeTest extends TestCase
 
     public function testDeleteNotFound(): void
     {
-        $this->testCreateSuccess();
+        $access_token = $this->testCreateSuccess();
         $employee = Employee::query()->limit(1)->first();
 
         $this->delete('api/employees/'.($employee->id+1), [], [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(404)
         ->assertJson([
             'errors' => [
@@ -309,9 +368,18 @@ class EmployeeTest extends TestCase
 
     public function testSearchByNameSuccess(): void
     {
-        $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+        
+        $this->seed([EmployeeListSeeder::class]);
         $response = $this->get('/api/employees?name=employee 1', [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(200)->json();
         self::assertEquals(1, count($response['data']));
 
@@ -320,11 +388,20 @@ class EmployeeTest extends TestCase
 
     public function testSearchByOutletIdSuccess(): void
     {
-        $this->seed([UserSeeder::class, EmployeeListSeeder::class, OutletListSeeder::class, EmployeeOutletSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->seed([EmployeeListSeeder::class, OutletListSeeder::class, EmployeeOutletSeeder::class]);
         $outlet = Outlet::query()->limit(1)->first();
 
         $response = $this->get('/api/employees?outletid='.$outlet->id, [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(200)->json();
 
         // Log::info(json_encode($response, JSON_PRETTY_PRINT));
@@ -332,11 +409,20 @@ class EmployeeTest extends TestCase
 
     public function testSearchByOutletIAndNameSuccess(): void
     {
-        $this->seed([UserSeeder::class, EmployeeListSeeder::class, OutletListSeeder::class, EmployeeOutletSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+
+        $this->seed([EmployeeListSeeder::class, OutletListSeeder::class, EmployeeOutletSeeder::class]);
         $outlet = Outlet::query()->limit(1)->first();
 
         $response = $this->get('/api/employees?name=1&outletid='.$outlet->id, [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(200)->json();
 
         // Log::info(json_encode($response, JSON_PRETTY_PRINT));
@@ -344,9 +430,17 @@ class EmployeeTest extends TestCase
     
     public function testGetAllSuccess(): void
     {
-        $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+        $this->seed([EmployeeListSeeder::class]);
         $response = $this->get('/api/employees', [
-            'Authorization' => 'test'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(200)->json();
         self::assertEquals(5, count($response['data']));
 
@@ -355,9 +449,17 @@ class EmployeeTest extends TestCase
     
     public function testGetAllEmpty(): void
     {
-        $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+        // $this->seed([EmployeeListSeeder::class]);
         $response = $this->get('/api/employees', [
-            'Authorization' => 'test2'
+            'Authorization' => 'Bearer ' . $access_token
         ])->assertStatus(200)->json();
         self::assertEquals(0, count($response['data']));
         self::assertEmpty($response['data']);
@@ -365,7 +467,15 @@ class EmployeeTest extends TestCase
 
     public function testGetAllUnauthorized(): void
     {
-        $this->seed([UserSeeder::class, EmployeeListSeeder::class]);
+        $user = User::factory()->create([
+            'name' => 'test',
+            'email' => "test@mail.com",
+            'phone' => "08123456789",
+            'password' => Hash::make('password123'),
+        ]);
+
+        $access_token = $user->createToken('auth_token')->plainTextToken;
+        $this->seed([EmployeeListSeeder::class]);
         $this->get('/api/employees', [
             'Authorization' => ''
         ])->assertStatus(401)

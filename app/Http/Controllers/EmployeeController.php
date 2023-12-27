@@ -106,9 +106,14 @@ class EmployeeController extends Controller
         $employee->role = 'Pemilik';
         $employee->user_id = $user->id;
 
+        $employee->token = Str::uuid()->toString();
+
         $employee->save();
 
-        return (new EmployeeResource($employee))->response()->setStatusCode(201);
+        return (new EmployeeResource($employee))->additional([
+            'access_token' => $employee->token,
+            'token_type'   => 'x-auth-employee-token'
+        ])->response()->setStatusCode(201);
     }
 
     public function create(EmployeeRequest $request): JsonResponse
