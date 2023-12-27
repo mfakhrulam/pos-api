@@ -2,7 +2,8 @@
   "openapi": "3.0.2",
   "info": {
     "title": "Point Of Sales - API Reference",
-    "version": "1.0"
+    "description": "## Update 0.1.0 :\n- Menambahkan `/api/users/send_otp` untuk mengirimkan kode OTP ke email yang diminta dalam body request yang berguna untuk memverikasi email user \n - Menambahkan `/api/users/verify_otp` untuk memverikasi kode OTP yang telah dikirimkan ke email user\n - Mmenambahkan `/api/employees/register_owner` untuk menambahkan employee dengan role owner secara otomatis hanya dengan mengirimkan kode pin \n  - Menambahkan `/api/employees/login` dan `/api/employees/logout` untuk proses login dan logout employee juga untuk mendapatkan access_token employee \n - Menambahkan keamanan pada endpoint dengan method POST, PUT, dan DELETE di outlet, employee, customer, category, dan product, kecuali di endpoint `/api/employees/login` dan `/api/employees/register_owner`",
+    "version": "0.1.0"
   },
   "servers": [
     {
@@ -732,6 +733,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -982,6 +986,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -1023,6 +1030,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       }
@@ -1033,9 +1043,6 @@
           "employee"
         ],
         "description": "Create new employee",
-        "parameters": [
-          
-        ],
         "requestBody": {
           "description": "Create new employee",
           "content": {
@@ -1218,11 +1225,42 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "errors": {
+                    "message": [
+                      "Unauthorized"
+                    ]
+                 }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions",
+            "content": {
+              "application/json": {
+                "example": {
+                  "errors": {
+                    "message": [
+                      "Insufficient permissions"
+                    ]
+                 }
+                }
+              }
+            }
           }
         },
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -1238,14 +1276,6 @@
             "required": false,
             "schema": {
               "type": "string"
-            }
-          },
-          {
-            "name": "outletid",
-            "in": "query",
-            "required": false,
-            "schema": {
-              "type": "integer"
             }
           }
         ],
@@ -1263,6 +1293,7 @@
                           "id": 1,
                           "name": "Fakhrul",
                           "phone": "08123456789",
+                          "pin": 1234,
                           "email": "fakhrul@gmail.com",
                           "role": "Kasir"
                         },
@@ -1270,6 +1301,7 @@
                           "id": 2,
                           "name": "Fakhrul2",
                           "phone": "08123456789",
+                          "pin": 1234,
                           "email": "fakhrul2@gmail.com",
                           "role": "Kasir"
                         }
@@ -1311,6 +1343,214 @@
                           }
                         }
                       }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/employees/register_owner": {
+      "post": {
+        "tags": [
+          "employee"
+        ],
+        "description": "Register an owner",
+        "requestBody": {
+          "description": "Register an owner",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "pin"
+                ],
+                "properties": {
+                  "pin": {
+                    "type": "string",
+                    "maximum": 4,
+                    "minimum": 4
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Success register an owner",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "description": "Success register an owner",
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "name": "Fakhrul",
+                        "phone": "08123456789",
+                        "pin": 1234,
+                        "email": "fakhrul@gmail.com",
+                        "role": "Pemilik"
+                      },
+                      "access_token": "fsbcuhruhasbirhawluhekj",
+                      "token_type": "x-auth-employee-token"
+                    }
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "pin": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "Kasir",
+                            "Manajer",
+                            "Pemilik",
+                            "Superadmin"
+                          ]
+                        }
+                      }
+                    },
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/api/employees/login": {
+      "post": {
+        "tags": [
+          "employee"
+        ],
+        "description": "Login an employee",
+        "requestBody": {
+          "description": "Login an employee",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "id",
+                  "pin"
+                ],
+                "properties": {
+                  "id": {
+                    "type": "integer"
+                  },
+                  "pin": {
+                    "type": "string",
+                    "maximum": 4,
+                    "minimum": 4
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success login an employee",
+            "content": {
+              "application/json": {
+                "examples": {
+                  "success": {
+                    "description": "Success login an employee",
+                    "value": {
+                      "data": {
+                        "id": 1,
+                        "name": "Fakhrul",
+                        "phone": "08123456789",
+                        "pin": 1234,
+                        "email": "fakhrul@gmail.com",
+                        "role": "Pemilik"
+                      },
+                      "access_token": "fsbcuhruhasbirhawluhekj",
+                      "token_type": "x-auth-employee-token"
+                    }
+                  }
+                },
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "integer"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "phone": {
+                          "type": "string"
+                        },
+                        "pin": {
+                          "type": "string"
+                        },
+                        "email": {
+                          "type": "string"
+                        },
+                        "role": {
+                          "type": "string",
+                          "enum": [
+                            "Kasir",
+                            "Manajer",
+                            "Pemilik",
+                            "Superadmin"
+                          ]
+                        }
+                      }
+                    },
+                    "access_token": {
+                      "type": "string"
+                    },
+                    "token_type": {
+                      "type": "string"
+                    },
+                    "errors": {
+                      "type": "object"
                     }
                   }
                 }
@@ -1555,11 +1795,42 @@
                 }
               }
             }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "example": {
+                  "errors": {
+                    "message": [
+                      "Unauthorized"
+                    ]
+                 }
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "Insufficient permissions",
+            "content": {
+              "application/json": {
+                "example": {
+                  "errors": {
+                    "message": [
+                      "Insufficient permissions"
+                    ]
+                 }
+                }
+              }
+            }
           }
         },
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -1601,6 +1872,45 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
+          }
+        ]
+      }
+    },
+    "/api/employees/logout": {
+      "delete": {
+        "tags": [
+          "employee"
+        ],
+        "description": "Logout an employee",
+        "responses": {
+          "200": {
+            "description": "Success logout current user",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    },
+                    "errors": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       }
@@ -1685,6 +1995,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -1900,6 +2213,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -1941,6 +2257,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       }
@@ -1999,6 +2318,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -2164,6 +2486,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -2206,6 +2531,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       }
@@ -2303,6 +2631,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -2462,6 +2793,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -2563,6 +2897,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       },
@@ -2605,6 +2942,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       }
@@ -2649,6 +2989,9 @@
         "security": [
           {
             "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
           }
         ]
       }
@@ -2688,6 +3031,11 @@
       "BearerAuth": {
         "type": "http",
         "scheme": "bearer"
+      },
+      "EmployeeAuth": {
+        "name": "x-auth-employee-token",
+        "type": "apiKey",
+        "in": "header"
       }
     }
   }

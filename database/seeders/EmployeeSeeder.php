@@ -15,7 +15,7 @@ class EmployeeSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::where('email', 'test@mail.com')->first();
+        $user = User::first();
         $outlet = Outlet::query()->limit(1)->first();
 
         Employee::create([

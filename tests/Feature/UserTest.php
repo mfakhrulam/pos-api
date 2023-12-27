@@ -44,7 +44,7 @@ class UserTest extends TestCase
         ->assertJson([
             'errors' => [
                 'name' => [
-                    
+                    'The name field is required.'
                 ],
                 'phone' => [
                     'The phone field is required.'

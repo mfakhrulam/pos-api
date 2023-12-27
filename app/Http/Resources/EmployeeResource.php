@@ -18,6 +18,7 @@ class EmployeeResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'phone' => $this->phone,
+            'pin' => $this->pin,
             'email' => $this->email,
             'role' => $this->role,
             'outlets' => OutletResource::collection($this->whenLoaded('outlets'))

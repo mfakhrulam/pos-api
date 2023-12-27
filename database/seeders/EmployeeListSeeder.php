@@ -14,7 +14,7 @@ class EmployeeListSeeder extends Seeder
      */
     public function run(): void
     {
-        $user = User::where('email', 'test@mail.com')->first();
+        $user = User::first();
         for($i = 0; $i < 5; $i++)  {
             Employee::create([
                 'name' => 'employee ' . $i,

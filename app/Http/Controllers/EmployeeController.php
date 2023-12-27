@@ -2,17 +2,23 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\EmployeeLoginRequest;
 use App\Http\Requests\EmployeeRequest;
 use App\Http\Resources\EmployeeCollectionResource;
 use App\Http\Resources\EmployeeResource;
 use App\Models\Employee;
 use App\Models\User;
+use Illuminate\Contracts\Auth\Guard;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Str;
+
 
 class EmployeeController extends Controller
 {
@@ -37,6 +43,77 @@ class EmployeeController extends Controller
         }
 
         return $employee;
+    }
+
+    public function login(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(),[
+            'id' => ['required', 'integer'],
+            'pin' => ['required', 'size:4', 'regex:/^[0-9]+$/'],
+        ]);
+
+        if($validator->fails()){
+            throw new HttpResponseException(response([
+                'errors' => $validator->getMessageBag()
+            ], 400));
+        }
+
+        $employee = Employee::where('id', $request->id)->first();
+        // $employee = auth()->guard('employee')->attempt($credentials);
+        
+        if(!$employee || !($request->pin == $employee->pin)) {
+            throw new HttpResponseException(response([
+                'errors' => [
+                    'message' => [
+                        'wrong credentials'
+                    ]
+                ]
+            ], 401));
+        }
+        
+        $employee->token = Str::uuid()->toString();
+        $employee->save();
+
+        return (new EmployeeResource($employee))->additional([
+            'access_token' => $employee->token,
+            'token_type'   => 'x-auth-employee-token'
+        ])->response()->setStatusCode(200);
+    }
+
+    public function registerOwner(Request $request): JsonResponse
+    {
+        $validator = Validator::make($request->all(),[
+            'pin' => ['required', 'size:4', 'regex:/^[0-9]+$/'],
+        ]);
+
+        if($validator->fails()){
+            throw new HttpResponseException(response([
+                'errors' => $validator->getMessageBag()
+            ], 400));
+        }
+
+        $user = Auth::user();
+        // jika di akun user udah ada employee owner
+        // maka tulis error, owner sudah ada
+        // jika tidak, maka bisa buat baru
+
+        $employee = new Employee();
+
+        $employee->name = $user['name'];
+        $employee->phone = $user['phone'];
+        $employee->pin = $request->pin;
+        $employee->email = $user['email'];
+        $employee->role = 'Pemilik';
+        $employee->user_id = $user->id;
+
+        $employee->token = Str::uuid()->toString();
+
+        $employee->save();
+
+        return (new EmployeeResource($employee))->additional([
+            'access_token' => $employee->token,
+            'token_type'   => 'x-auth-employee-token'
+        ])->response()->setStatusCode(201);
     }
 
     public function create(EmployeeRequest $request): JsonResponse
@@ -115,5 +192,15 @@ class EmployeeController extends Controller
         $employees = $employees->get();
         return (EmployeeResource::collection($employees))->response()->setStatusCode(200);
 
+    }
+
+    public function logout(Request $request): JsonResponse
+    {
+        $employee = $request->user('employee');
+        $employee->token = null;
+        $employee->save();
+        return response()->json([
+            'data' => true
+        ])->setStatusCode(200);
     }
 }
