@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Employee extends Model implements Authenticatable
 {
@@ -37,6 +38,16 @@ class Employee extends Model implements Authenticatable
     public function outlets(): BelongsToMany 
     {
         return $this->belongsToMany(Outlet::class, 'employees_outlets', 'employee_id', 'outlet_id');
+    }
+
+    public function carts(): HasMany
+    {
+        return $this->hasMany(Cart::class, 'employee_id', 'id');
+    }
+
+    public function invoices(): HasMany
+    {
+        return $this->hasMany(Invoice::class, 'employee_id', 'id');
     }
 
     /**
