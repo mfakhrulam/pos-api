@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\CartController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\CustomerController;
 use App\Http\Controllers\EmployeeController;
@@ -73,4 +74,10 @@ Route::middleware(ApiAuthMiddleware::class)->group(function() {
   Route::put('/products/{id}', [ProductController::class, 'update'])->where('id', '[0-9]+')->middleware('role:Pemilik,Manajer');
   Route::delete('/products/{id}', [ProductController::class, 'delete'])->where('id', '[0-9]+')->middleware('role:Pemilik');
   Route::delete('/products/{id}/delete_image', [ProductController::class, 'deleteImage'])->where('id', '[0-9]+')->middleware('role:Pemilik');
+
+  Route::put('/carts', [CartController::class, 'addOrUpdateItem']);
+  Route::get('/carts', [CartController::class, 'get']);
+  Route::delete('/carts', [CartController::class, 'deleteCart']);
+  Route::delete('/carts/{id}', [CartController::class, 'deleteItems']);
+  Route::post('/carts/checkout', [CartController::class, 'checkout']);
 });
