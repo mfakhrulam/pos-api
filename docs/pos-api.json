@@ -34,6 +34,14 @@
     {
       "name": "product",
       "description": ""
+    },
+    {
+      "name": "cart",
+      "description": ""
+    },
+    {
+      "name": "invoice",
+      "description": ""
     }
   ],
   "paths": {
@@ -130,29 +138,7 @@
                   }
                 },
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "errors": {
-                      "type": "object"
-                    }
-                  }
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -235,7 +221,7 @@
                     "message": [
                       "User not found"
                     ]
-                 }
+                  }
                 }
               }
             }
@@ -245,11 +231,11 @@
             "content": {
               "application/json": {
                 "example": {
-                   "errors": {
-                      "message": [
-                        "The user has been verified, no OTP code required"
-                      ]
-                   }
+                  "errors": {
+                    "message": [
+                      "The user has been verified, no OTP code required"
+                    ]
+                  }
                 }
               }
             }
@@ -314,32 +300,7 @@
                   }
                 },
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "access_token": {
-                      "type": "string"
-                    },
-                    "token_type": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UserWithAccessToken"
                 }
               }
             }
@@ -359,7 +320,7 @@
                         ]
                       }
                     }
-                  }, 
+                  },
                   "Verified User": {
                     "description": "The user has been verified",
                     "value": {
@@ -383,7 +344,7 @@
                     "message": [
                       "OTP wrong or expired"
                     ]
-                 }
+                  }
                 }
               }
             }
@@ -448,32 +409,7 @@
                   }
                 },
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "access_token": {
-                      "type": "string"
-                    },
-                    "token_type": {
-                      "type": "string"
-                    }
-                  }
+                  "$ref": "#/components/schemas/UserWithAccessToken"
                 }
               }
             }
@@ -490,7 +426,7 @@
                     "message": [
                       "Email has not been verified"
                     ]
-                 }
+                  }
                 }
               }
             }
@@ -510,29 +446,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "errors": {
-                      "type": "object"
-                    }
-                  }
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -540,7 +454,7 @@
         },
         "security": [
           {
-            "BearerAuth":[]
+            "BearerAuth": []
           }
         ]
       },
@@ -579,29 +493,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        }
-                      }
-                    },
-                    "errors": {
-                      "type": "object"
-                    }
-                  }
+                  "$ref": "#/components/schemas/User"
                 }
               }
             }
@@ -609,7 +501,7 @@
         },
         "security": [
           {
-            "BearerAuth":[]
+            "BearerAuth": []
           }
         ]
       }
@@ -642,7 +534,7 @@
         },
         "security": [
           {
-            "BearerAuth":[]
+            "BearerAuth": []
           }
         ]
       }
@@ -653,9 +545,7 @@
           "outlet"
         ],
         "description": "Create new outlet",
-        "parameters": [
-          
-        ],
+        "parameters": [],
         "requestBody": {
           "description": "Create new outlet",
           "content": {
@@ -696,35 +586,7 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "properties": {
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "id": {
-                          "type": "integer"
-                        },
-                        "name": {
-                          "type": "string"
-                        },
-                        "address": {
-                          "type": "string"
-                        },
-                        "phone": {
-                          "type": "string"
-                        },
-                        "email": {
-                          "type": "string"
-                        },
-                        "is_active": {
-                          "type": "boolean"
-                        }
-                      }
-                    },
-                    "errors": {
-                      "type": "object"
-                    }
-                  }
+                  "$ref": "#/components/schemas/Outlet"
                 }
               }
             }
@@ -744,9 +606,7 @@
           "outlet"
         ],
         "description": "Get list outlet",
-        "parameters": [
-          
-        ],
+        "parameters": [],
         "responses": {
           "200": {
             "description": "Success get list outlet",
@@ -758,27 +618,7 @@
                     "data": {
                       "type": "array",
                       "items": {
-                        "type": "object",
-                        "properties": {
-                          "id": {
-                            "type": "integer"
-                          },
-                          "name": {
-                            "type": "string"
-                          },
-                          "address": {
-                            "type": "string"
-                          },
-                          "phone": {
-                            "type": "string"
-                          },
-                          "email": {
-                            "type": "string"
-                          },
-                          "is_active": {
-                            "type": "boolean"
-                          }
-                        }
+                        "$ref": "#/components/schemas/Outlet"
                       }
                     },
                     "errors": {
@@ -1235,7 +1075,7 @@
                     "message": [
                       "Unauthorized"
                     ]
-                 }
+                  }
                 }
               }
             }
@@ -1249,7 +1089,7 @@
                     "message": [
                       "Insufficient permissions"
                     ]
-                 }
+                  }
                 }
               }
             }
@@ -1805,7 +1645,7 @@
                     "message": [
                       "Unauthorized"
                     ]
-                 }
+                  }
                 }
               }
             }
@@ -1819,7 +1659,7 @@
                     "message": [
                       "Insufficient permissions"
                     ]
-                 }
+                  }
                 }
               }
             }
@@ -2596,6 +2436,9 @@
                         "id": {
                           "type": "integer"
                         },
+                        "image": {
+                          "type": "string"
+                        },
                         "name": {
                           "type": "string"
                         },
@@ -2694,6 +2537,9 @@
                           "name": {
                             "type": "string"
                           },
+                          "image": {
+                            "type": "string"
+                          },
                           "description": {
                             "type": "string"
                           },
@@ -2761,6 +2607,9 @@
                       "type": "integer"
                     },
                     "name": {
+                      "type": "string"
+                    },
+                    "image": {
                       "type": "string"
                     },
                     "description": {
@@ -2863,6 +2712,9 @@
                           "type": "integer"
                         },
                         "name": {
+                          "type": "string"
+                        },
+                        "image": {
                           "type": "string"
                         },
                         "description": {
@@ -2995,20 +2847,370 @@
           }
         ]
       }
+    },
+    "/api/carts": {
+      "put": {
+        "tags": [
+          "cart"
+        ],
+        "summary": "Add/update item to/from cart",
+        "description": "Add/update item to/from cart associated with an employee",
+        "requestBody": {
+          "required": true,
+          "description": "Add/update item to/from cart associated with an employee",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "product_id",
+                  "qty"
+                ],
+                "properties": {
+                  "product_id": {
+                    "type": "integer"
+                  },
+                  "qty": {
+                    "type": "integer"
+                  },
+                  "discount_percentage": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Add/update item to/from cart associated with an employee",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/InvoiceItem"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
+          }
+        ]
+      },
+      "get": {
+        "tags": [
+          "cart"
+        ],
+        "summary": "Get item from cart associated with an employee",
+        "description": "Get item from cart associated with an employee",
+        "responses": {
+          "200": {
+            "description": "Success get item from cart associated with an employee",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "products": {
+                          "type": "array",
+                          "items": {
+                            "$ref": "#/components/schemas/InvoiceItem"
+                          }
+                        }
+                      }                      
+                    },
+                    "total_items": {
+                      "type": "integer"
+                    },
+                    "total_price": {
+                      "type": "number",
+                      "format": "float"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "cart"
+        ],
+        "summary": "Delete all items from cart",
+        "description": "Delete all items from cart associated with an employee",
+        "responses": {
+          "200": {
+            "description": "Success delete all items from cart associated with an employee",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
+          }
+        ]
+      }
+    },
+    "/api/carts/{productId}": {
+      "delete": {
+        "tags": [
+          "cart"
+        ],
+        "parameters": [
+          {
+            "name": "productId",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID of the product"
+          }
+        ],
+        "summary": "Delete an item from cart",
+        "description": "Delete an item from cart associated with an employee",
+        "responses": {
+          "200": {
+            "description": "Success delete an item from cart associated with an employee",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
+          }
+        ]
+      }
+    },
+    "/api/carts/checkout": {
+      "post": {
+        "tags": [
+          "cart"
+        ],
+        "description": "Checkout items from cart associated with an employee",
+        "summary": "Checkout items from cart",
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "payment_type",
+                  "outlet_id",
+                  "amount_paid"
+                ],
+                "properties": {
+                  "payment_type": {
+                    "type": "string"
+                  },
+                  "customer_id": {
+                    "type": "integer"
+                  },
+                  "outlet_id": {
+                    "type": "integer"
+                  },
+                  "amount_paid": {
+                    "type": "number",
+                    "format": "float"
+                  },
+                  "discount_percentage": {
+                    "type": "integer"
+                  },
+                  "tax_percentage": {
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Success checkout items from cart",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Invoice"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BearerAuth": []
+          },
+          {
+            "EmployeeAuth": []
+          }
+        ]
+      }
+    },
+    "/api/invoices": {
+      "get": {
+        "tags": [
+          "invoice"
+        ],
+        "description": "Get all invoices",
+        "responses": {
+          "200": {
+            "description": "Success get all invoices",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Invoice"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/invoices/{invoiceId}": {
+      "get": {
+        "description": "Get invoice by id",
+        "tags": [
+          "invoice"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success get invoice by id",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref" : "#/components/schemas/Invoice"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
+      "User": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              }
+            }
+          },
+          "errors": {
+            "type": "object"
+          }
+        }
+      },
+      "UserWithAccessToken": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "name": {
+                "type": "string"
+              },
+              "email": {
+                "type": "string"
+              },
+              "phone": {
+                "type": "string"
+              }
+            }
+          },
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string"
+          }
+        }
+      },
       "Outlet": {
         "type": "object",
-        "required": [
-          "name",
-          "address",
-          "phone",
-          "email",
-          "is_active"
-        ],
         "properties": {
+          "id": {
+            "type": "integer"
+          },
           "name": {
             "type": "string"
           },
@@ -3023,6 +3225,207 @@
           },
           "is_active": {
             "type": "boolean"
+          }
+        }
+      },
+      "Customer": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "gender": {
+            "type": "string",
+            "enum": [
+              "Laki-laki",
+              "Perempuan"
+            ]
+          }
+        }
+      },
+      "Employee": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "phone": {
+            "type": "string"
+          },
+          "pin": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "Kasir",
+              "Manajer",
+              "Pemilik",
+              "Superadmin"
+            ]
+          }
+        }
+      },
+      "Product": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "float"
+          },
+          "is_for_sale": {
+            "type": "boolean"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Category"
+          }
+        }
+      },
+      "Category": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          }
+        }
+      },
+      "Invoice": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "invoice": {
+            "type": "string"
+          },
+          "payment_type": {
+            "type": "string"
+          },
+          "is_paid": {
+            "type": "boolean"
+          },
+          "is_refunded": {
+            "type": "boolean"
+          },
+          "discount_percentage": {
+            "type": "integer"
+          },
+          "discount_total": {
+            "type": "number",
+            "format": "float"
+          },
+          "tax_percentage": {
+            "type": "integer"
+          },
+          "tax_total": {
+            "type": "number",
+            "format": "float"
+          },
+          "subtotal": {
+            "type": "number",
+            "format": "float"
+          },
+          "total": {
+            "type": "number",
+            "format": "float"
+          },
+          "total_paid": {
+            "type": "number",
+            "format": "float"
+          },
+          "return": {
+            "type": "number",
+            "format": "float"
+          },
+          "created_at": {
+            "type": "string"
+          },
+          "updated_at": {
+            "type": "string"
+          },
+          "employee": {
+            "$ref": "#/components/schemas/Employee"
+          },
+          "customer": {
+            "$ref": "#/components/schemas/Customer"
+          },
+          "outlet": {
+            "$ref": "#/components/schemas/Outlet"
+          },
+          "invoice_items": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/InvoiceItem"
+            }
+          }
+        }
+      },
+      "InvoiceItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "price": {
+            "type": "number",
+            "format": "float"
+          },
+          "is_for_sale": {
+            "type": "boolean"
+          },
+          "image": {
+            "type": "string"
+          },
+          "qty": {
+            "type": "integer"
+          },
+          "subtotal_product": {
+            "type": "number",
+            "format": "float"
+          },
+          "discount_percentage_product": {
+            "type": "integer"
+          },
+          "discount_total_product": {
+            "type": "number",
+            "format": "float"
+          },
+          "total_product": {
+            "type": "number",
+            "format": "float"
           }
         }
       }
